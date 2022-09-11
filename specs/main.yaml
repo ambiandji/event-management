@@ -7,6 +7,22 @@ servers:
   - url: 'https'
 paths:
   /artist:
+    get:
+      tags:
+        - Artist
+      summary: Fetch all artist
+      description: Fetch all artist from database
+      operationId: findArtistAll
+      security:
+        - oAuth:
+            - artist:read
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
     post:
       tags:
         - Artist
@@ -50,6 +66,42 @@ paths:
                 $ref: '#/components/schemas/ErrorResponses'
         409:
           description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+  /artist/name/{name}:
+    get:
+      tags:
+        - Artist
+      summary: Find Artist by name
+      description: Find artist by name from database
+      operationId: findArtistByName
+      security:
+        - oAuth:
+            - artist:read
+      parameters:
+        - name: name
+          in: path
+          description: Artist name to be fetch
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:

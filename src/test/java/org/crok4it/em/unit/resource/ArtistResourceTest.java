@@ -15,6 +15,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.crok4it.em.constant.ArtistConstant.API_ARTIST_BASE_ROUTE;
@@ -134,4 +136,25 @@ public class ArtistResourceTest extends BaseResourceTest{
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    @DisplayName("Fetch artist by existing name from database")
+    void fetchArtistByExistingNameShouldSuccess() throws Exception {
+        String name = "Artist_fetchByName_name";
+        String message = "Artists fetch successfully";
+
+        when(artisService.findByName(name)).thenReturn(Collections.singletonList(artistDTO));
+
+        mvc.perform(get(API_ARTIST_BASE_ROUTE + "/name/" + name))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]").isArray())
+                .andExpect(jsonPath("$.result[0]").isArray())
+                .andExpect(jsonPath("$.result[0][0].name").value(artistDTO.getName()))
+                .andExpect(jsonPath("$.result[0][0].phone").value(artistDTO.getPhone()))
+                .andExpect(jsonPath("$.message").value(message))
+                .andExpect(jsonPath("$.success").value(true));
+    }
+
 }

@@ -15,6 +15,8 @@ import org.mockito.InOrder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -126,6 +128,23 @@ public class ArtistServiceImplTest {
         InOrder inOrder = inOrder(artistRepository);
         inOrder.verify(artistRepository).findById(artistId);
 
+    }
+
+    @Test
+    @DisplayName("Fetch artist by name from database")
+    void findArtistByExistingNameShouldSuccess() {
+        String name = "name";
+        Artist artist = mock(Artist.class);
+        ArtistDTO artistDTO = mock(ArtistDTO.class);
+
+        when(artistRepository.findByNameContainsIgnoreCase(name)).thenReturn(Collections.singletonList(artist));
+        when(artistMapper.toDto(artist)).thenReturn(artistDTO);
+
+        assertThat(artistService.findByName(name)).isEqualTo(Collections.singletonList(artistDTO));
+
+        InOrder inOrder = inOrder(artistRepository, artistMapper);
+        inOrder.verify(artistRepository).findByNameContainsIgnoreCase(name);
+        inOrder.verify(artistMapper).toDto(artist);
 
     }
 

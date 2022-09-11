@@ -2,6 +2,7 @@ package org.crok4it.em.e2e.steps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
@@ -14,7 +15,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -39,6 +43,8 @@ public class ArtistSteps implements En{
     private UUID artistId;
 
     private ArtistDTO artistDTO;
+
+    private List<ArtistDTO> artistDTOS = new ArrayList<>();
 
     public ArtistSteps() {
 
@@ -144,6 +150,39 @@ public class ArtistSteps implements En{
                             .andReturn();
                     assertThat(result.getResponse().getStatus()).isEqualTo(Integer.valueOf(errorCode));
                     assertThat(HttpStatus.valueOf(result.getResponse().getStatus()).name()).isEqualTo(httpStatus);
+        });
+        When("I fetch artist with name {string}", (String artistName) -> {
+            MvcResult result = mvc.perform(get(API_ARTIST_BASE_ROUTE + "/name/" + artistName)
+                            .accept(APPLICATION_JSON))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andReturn();
+
+            Gson gson = new Gson();
+            Type artistDTOListType = new TypeToken<ArrayList<ArtistDTO>>(){}.getType();
+            artistDTOS = gson.fromJson(String.valueOf((ArrayList<LinkedHashMap>)
+                    JsonPath.read(result.getResponse().getContentAsString(), "$.result[0]")), artistDTOListType);
+
+            assertThat(artistDTOS)
+                    .hasSizeGreaterThan(0)
+                    .isInstanceOf(ArrayList.class);
+        });
+
+        Then("The attempt to fetch an artist with the name {string} will return empty list",
+                (String artistName) -> {
+                MvcResult result = mvc.perform(get(API_ARTIST_BASE_ROUTE + "/name/" + artistName)
+                                .accept(APPLICATION_JSON))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andReturn();
+                Gson gson = new Gson();
+                Type artistDTOListType = new TypeToken<ArrayList<ArtistDTO>>(){}.getType();
+                artistDTOS = gson.fromJson(String.valueOf((ArrayList<LinkedHashMap>)
+                        JsonPath.read(result.getResponse().getContentAsString(), "$.result[0]")), artistDTOListType);
+
+                assertThat(artistDTOS)
+                        .hasSize(0)
+                        .isInstanceOf(ArrayList.class);
         });
 
     }

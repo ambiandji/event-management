@@ -15,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -40,6 +42,14 @@ public class ArtistServiceImpl implements ArtistService {
                 .map(artistMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         String.format("Artist with id %s not found", id), ErrorCode.ARTIST_NOT_FOUND));
+    }
+
+    @Override
+    public List<ArtistDTO> findByName(String name) {
+        return artistRepository.findByNameContainsIgnoreCase(name)
+                .stream()
+                .map(artistMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     //@Override

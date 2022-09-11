@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import static org.crok4it.em.constant.CommonConstant.API_BASE_ROUTE;
@@ -43,6 +44,11 @@ public class ArtisteResource implements ArtistApi {
     }
 
     @Override
+    public ResponseEntity<SuccessResponse> findArtistAll() {
+        return null;
+    }
+
+    @Override
     public ResponseEntity<SuccessResponse> findArtistById(UUID id) {
         ArtistDTO artistDTO = artistService.findById(id.toString());
         return ResponseEntity.status(OK).body(
@@ -50,6 +56,16 @@ public class ArtisteResource implements ArtistApi {
                         .success(true)
                         .message("Artist fetch successfully")
                         .result(Collections.singletonList(artistDTO)));
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponse> findArtistByName(String name) {
+        List<ArtistDTO> artistDTOS = artistService.findByName(name);
+        return ResponseEntity.status(OK).body(
+                new SuccessResponse()
+                        .success(true)
+                        .message("Artists fetch successfully")
+                        .result(Collections.singletonList(artistDTOS)));
     }
 
 }

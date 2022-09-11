@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.ArrayList;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ArtisRepositoryTest extends BaseRepositoryTest{
@@ -241,5 +243,16 @@ public class ArtisRepositoryTest extends BaseRepositoryTest{
                         .returns(seekingVenue, Artist::getSeekingVenue)
                         .returns(seekingDescription, Artist::getSeekingDescription)
                 );
+    }
+
+    @Test
+    @DisplayName("Find artist by name")
+    void findByNameContainsIgnoreCaseExistingNameShouldSuccess() {
+        String name = "name";
+        artistRepository.findByNameContainsIgnoreCase(name).forEach(artist -> System.out.println(artist.getName()));
+        assertThat(artistRepository.findByNameContainsIgnoreCase(name))
+                .hasSizeGreaterThan(0)
+                .isInstanceOf(ArrayList.class);
+
     }
 }
