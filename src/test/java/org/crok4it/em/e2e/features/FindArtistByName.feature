@@ -1,6 +1,6 @@
 Feature: Find artist by id
 
-  Scenario: Find Artist with an existing id
+  Scenario: Find Artist with an existing name
     Given I am logged in with the scopes 'artist:read'
     When I fetch artist with name 'name'
     Then I should the following artist is returned from database

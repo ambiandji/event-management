@@ -44,6 +44,18 @@ public class ArtisteResource implements ArtistApi {
     }
 
     @Override
+    public ResponseEntity<SuccessResponse> deleteById(UUID id) {
+        artistService.deleteById(id.toString());
+        return ResponseEntity
+                .status(OK)
+                .body(
+                        new SuccessResponse()
+                                .success(true)
+                                .message("Artist deleted successfully")
+                                .result(Collections.emptyList()));
+    }
+
+    @Override
     public ResponseEntity<SuccessResponse> findArtistAll() {
         List<ArtistDTO> artistDTOS = artistService.findAll();
         return ResponseEntity.status(OK).body(

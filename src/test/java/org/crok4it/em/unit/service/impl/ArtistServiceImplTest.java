@@ -24,7 +24,11 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.inOrder;
 
@@ -163,6 +167,41 @@ public class ArtistServiceImplTest {
         InOrder inOrder = inOrder(artistRepository, artistMapper);
         inOrder.verify(artistRepository).findAll();
         inOrder.verify(artistMapper).toDto(artist);
+
+    }
+
+    @Test
+    @DisplayName("Delete artist by id from database")
+    void deleteArtistByExistingIdShouldSuccess() {
+        String artistId = UUID.randomUUID().toString();
+        Artist artist = mock(Artist.class);
+
+        when(artistRepository.findById(artistId)).thenReturn(Optional.of(artist));
+        doNothing().when(artistRepository).deleteById(artistId);
+
+        artistService.deleteById(artistId);
+
+        InOrder inOrder = inOrder(artistRepository);
+        inOrder.verify(artistRepository).findById(artistId);
+        inOrder.verify(artistRepository).deleteById(artistId);
+
+
+
+    }
+    @Test
+    @DisplayName("Delete artist with wrong id from database")
+    void deleteArtistWithWrongIdShouldFail() {
+        String artistId = UUID.randomUUID().toString();
+        Artist artist = mock(Artist.class);
+
+        when(artistRepository.findById(artistId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> artistService.deleteById(artistId))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage(String.format("Artist with id %s not found", artistId));
+
+        InOrder inOrder = inOrder(artistRepository);
+        inOrder.verify(artistRepository).findById(artistId);
 
     }
 

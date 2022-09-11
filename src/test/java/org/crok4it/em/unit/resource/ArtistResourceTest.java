@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.UUID;
 
 import static org.crok4it.em.constant.ArtistConstant.API_ARTIST_BASE_ROUTE;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -174,6 +176,35 @@ public class ArtistResourceTest extends BaseResourceTest{
                 .andExpect(jsonPath("$.result[0][0].phone").value(artistDTO.getPhone()))
                 .andExpect(jsonPath("$.message").value(message))
                 .andExpect(jsonPath("$.success").value(true));
+    }
+
+    @Test
+    @DisplayName("Delete artist by existing id from database")
+    void deleteArtistByExistingIdShouldSuccess() throws Exception {
+        UUID artistId = UUID.randomUUID();
+        String message = "Artist deleted successfully";
+
+        doNothing().when(artisService).deleteById(artistId.toString());
+
+        mvc.perform(delete(API_ARTIST_BASE_ROUTE + "/" + artistId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.message").value(message))
+                .andExpect(jsonPath("$.success").value(true));
+    }
+
+    @Test
+    @DisplayName("Delete artist with wrong id from database")
+    void deleteArtistWithWrongIdShouldFail() throws Exception {
+        UUID artistId = UUID.randomUUID();
+
+        doThrow(ResourceNotFoundException.class).when(artisService).deleteById(artistId.toString());
+
+
+        mvc.perform(delete(API_ARTIST_BASE_ROUTE + "/" + artistId))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
 }

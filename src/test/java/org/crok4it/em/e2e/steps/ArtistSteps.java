@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -45,6 +46,8 @@ public class ArtistSteps implements En{
     private ArtistDTO artistDTO;
 
     private List<ArtistDTO> artistDTOS = new ArrayList<>();
+
+    private String msg;
 
     public ArtistSteps() {
 
@@ -119,8 +122,7 @@ public class ArtistSteps implements En{
                             .andReturn();
 
                     Gson gson = new Gson();
-                    artistDTO = gson.fromJson(String.valueOf((LinkedHashMap)
-                            JsonPath.read(result.getResponse().getContentAsString(), "$.result[0]")), ArtistDTO.class);
+                    artistDTO = parseJsonToObject(result);
 
                     assertThat(artistDTO)
                             .isNotNull()
@@ -158,10 +160,7 @@ public class ArtistSteps implements En{
                     .andExpect(status().isOk())
                     .andReturn();
 
-            Gson gson = new Gson();
-            Type artistDTOListType = new TypeToken<ArrayList<ArtistDTO>>(){}.getType();
-            artistDTOS = gson.fromJson(String.valueOf((ArrayList<LinkedHashMap>)
-                    JsonPath.read(result.getResponse().getContentAsString(), "$.result[0]")), artistDTOListType);
+            artistDTOS = parseJsonToList(result);
 
             assertThat(artistDTOS)
                     .hasSizeGreaterThan(0)
@@ -175,10 +174,8 @@ public class ArtistSteps implements En{
                         .andDo(print())
                         .andExpect(status().isOk())
                         .andReturn();
-                Gson gson = new Gson();
-                Type artistDTOListType = new TypeToken<ArrayList<ArtistDTO>>(){}.getType();
-                artistDTOS = gson.fromJson(String.valueOf((ArrayList<LinkedHashMap>)
-                        JsonPath.read(result.getResponse().getContentAsString(), "$.result[0]")), artistDTOListType);
+
+                artistDTOS = parseJsonToList(result);
 
                 assertThat(artistDTOS)
                         .hasSize(0)
@@ -191,16 +188,65 @@ public class ArtistSteps implements En{
                         .andDo(print())
                         .andExpect(status().isOk())
                         .andReturn();
-                Gson gson = new Gson();
-                Type artistDTOListType = new TypeToken<ArrayList<ArtistDTO>>(){}.getType();
-                artistDTOS = gson.fromJson(String.valueOf((ArrayList<LinkedHashMap>)
-                        JsonPath.read(result.getResponse().getContentAsString(), "$.result[0]")), artistDTOListType);
+
+                artistDTOS = parseJsonToList(result);
 
                 assertThat(artistDTOS)
                         .hasSizeGreaterThan(0)
                         .isInstanceOf(ArrayList.class);
         });
+        When("I delete artist with id {string}",
+                (String id) -> {
+                MvcResult result = mvc.perform(delete(API_ARTIST_BASE_ROUTE + "/" + id)
+                                .accept(APPLICATION_JSON))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andReturn();
 
+
+                msg = JsonPath.read(result.getResponse().getContentAsString(), "$.message");
+
+
+        });
+
+        Then("The attempt to delete an artist with the id {string} will fail with status error {string} and error code {string}",
+                (String id, String httpStatus, String errorCode) -> {
+
+                MvcResult result = mvc.perform(delete(API_ARTIST_BASE_ROUTE + "/" + id)
+                                .accept(APPLICATION_JSON))
+                        .andDo(print())
+                        .andExpect(status().isNotFound())
+                        .andReturn();
+                assertThat(result.getResponse().getStatus()).isEqualTo(Integer.valueOf(errorCode));
+                assertThat(HttpStatus.valueOf(result.getResponse().getStatus()).name()).isEqualTo(httpStatus);
+
+        });
+
+        Then("I should the see that the artist with id {string} is no longer in database and success message is {string}",
+                (String id, String message) -> {
+
+                    assertThat(msg).isEqualTo(message);
+
+                    MvcResult result = mvc.perform(get(API_ARTIST_BASE_ROUTE + "/" + id)
+                                    .accept(APPLICATION_JSON))
+                            .andDo(print())
+                            .andExpect(status().isNotFound())
+                            .andReturn();
+        });
+
+    }
+
+    private ArtistDTO parseJsonToObject(MvcResult result) throws UnsupportedEncodingException {
+        Gson gson = new Gson();
+        return gson.fromJson(String.valueOf((LinkedHashMap)
+                JsonPath.read(result.getResponse().getContentAsString(), "$.result[0]")), ArtistDTO.class);
+    }
+
+    private List<ArtistDTO> parseJsonToList(MvcResult result) throws UnsupportedEncodingException {
+        Gson gson = new Gson();
+        Type artistDTOListType = new TypeToken<ArrayList<ArtistDTO>>(){}.getType();
+        return gson.fromJson(String.valueOf((ArrayList<LinkedHashMap>)
+                JsonPath.read(result.getResponse().getContentAsString(), "$.result[0]")), artistDTOListType);
     }
 
     private boolean isPresentInTheDatabase(Map<String, String> data) {

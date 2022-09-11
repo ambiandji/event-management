@@ -60,6 +60,16 @@ public class ArtistServiceImpl implements ArtistService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void deleteById(String id) {
+        artistRepository.findById(id).orElseThrow(() -> {
+            log.error("Artist with id {} not found", id);
+            throw new ResourceNotFoundException(
+                    String.format("Artist with id %s not found", id), ErrorCode.ARTIST_NOT_FOUND);
+        });
+        artistRepository.deleteById(id);
+    }
+
     //@Override
     public Artist findByPhone(String phone) {
         return artistRepository.findByPhone(phone).orElse(null);

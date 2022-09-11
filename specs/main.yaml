@@ -149,7 +149,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponses'
-
+    delete:
+      tags:
+        - Artist
+      summary: Delete artist by id
+      description: Delete artist by id from database
+      operationId: deleteById
+      security:
+        - oAuth:
+            - artist:delete
+      parameters:
+        - name: id
+          in: path
+          description: Artist id to be deleted
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
 components:
   securitySchemes:
     oAuth:

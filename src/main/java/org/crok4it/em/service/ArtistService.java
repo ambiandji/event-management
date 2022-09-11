@@ -14,6 +14,8 @@ public interface ArtistService {
     List<ArtistDTO> findByName(String name);
 
     List<ArtistDTO> findAll();
+
+    void deleteById(String id);
     /*Artist findByPhone(String phone);
     Artist findByFacebookLink(String facebookLink);
     Artist findByImageLink(String imageLink);
