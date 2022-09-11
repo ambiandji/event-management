@@ -148,4 +148,22 @@ public class ArtistServiceImplTest {
 
     }
 
+    @Test
+    @DisplayName("Fetch all artist from database")
+    void findArtisAllExistingShouldSuccess() {
+
+        Artist artist = mock(Artist.class);
+        ArtistDTO artistDTO = mock(ArtistDTO.class);
+
+        when(artistRepository.findAll()).thenReturn(Collections.singletonList(artist));
+        when(artistMapper.toDto(artist)).thenReturn(artistDTO);
+
+        assertThat(artistService.findAll()).isEqualTo(Collections.singletonList(artistDTO));
+
+        InOrder inOrder = inOrder(artistRepository, artistMapper);
+        inOrder.verify(artistRepository).findAll();
+        inOrder.verify(artistMapper).toDto(artist);
+
+    }
+
 }

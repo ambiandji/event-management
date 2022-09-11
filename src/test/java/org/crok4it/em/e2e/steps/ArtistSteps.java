@@ -184,6 +184,22 @@ public class ArtistSteps implements En{
                         .hasSize(0)
                         .isInstanceOf(ArrayList.class);
         });
+        Then("The attempt to fetch all artist from database will return a list of artist",
+                () -> {
+                MvcResult result = mvc.perform(get(API_ARTIST_BASE_ROUTE)
+                                .accept(APPLICATION_JSON))
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andReturn();
+                Gson gson = new Gson();
+                Type artistDTOListType = new TypeToken<ArrayList<ArtistDTO>>(){}.getType();
+                artistDTOS = gson.fromJson(String.valueOf((ArrayList<LinkedHashMap>)
+                        JsonPath.read(result.getResponse().getContentAsString(), "$.result[0]")), artistDTOListType);
+
+                assertThat(artistDTOS)
+                        .hasSizeGreaterThan(0)
+                        .isInstanceOf(ArrayList.class);
+        });
 
     }
 

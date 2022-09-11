@@ -157,4 +157,23 @@ public class ArtistResourceTest extends BaseResourceTest{
                 .andExpect(jsonPath("$.success").value(true));
     }
 
+    @Test
+    @DisplayName("Fetch all artist from database")
+    void fetchArtistAllShouldSuccess() throws Exception {
+        String message = "Artists fetch successfully";
+
+        when(artisService.findAll()).thenReturn(Collections.singletonList(artistDTO));
+
+        mvc.perform(get(API_ARTIST_BASE_ROUTE))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]").isArray())
+                .andExpect(jsonPath("$.result[0]").isArray())
+                .andExpect(jsonPath("$.result[0][0].name").value(artistDTO.getName()))
+                .andExpect(jsonPath("$.result[0][0].phone").value(artistDTO.getPhone()))
+                .andExpect(jsonPath("$.message").value(message))
+                .andExpect(jsonPath("$.success").value(true));
+    }
+
 }

@@ -45,7 +45,12 @@ public class ArtisteResource implements ArtistApi {
 
     @Override
     public ResponseEntity<SuccessResponse> findArtistAll() {
-        return null;
+        List<ArtistDTO> artistDTOS = artistService.findAll();
+        return ResponseEntity.status(OK).body(
+                new SuccessResponse()
+                        .success(true)
+                        .message("Artists fetch successfully")
+                        .result(Collections.singletonList(artistDTOS)));
     }
 
     @Override

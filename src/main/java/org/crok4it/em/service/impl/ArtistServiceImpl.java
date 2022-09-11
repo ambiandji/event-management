@@ -52,6 +52,14 @@ public class ArtistServiceImpl implements ArtistService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ArtistDTO> findAll() {
+        return artistRepository.findAll()
+                .stream()
+                .map(artistMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     //@Override
     public Artist findByPhone(String phone) {
         return artistRepository.findByPhone(phone).orElse(null);

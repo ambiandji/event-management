@@ -12,6 +12,8 @@ public interface ArtistService {
     ArtistDTO findById(String id);
 
     List<ArtistDTO> findByName(String name);
+
+    List<ArtistDTO> findAll();
     /*Artist findByPhone(String phone);
     Artist findByFacebookLink(String facebookLink);
     Artist findByImageLink(String imageLink);
