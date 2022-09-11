@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: 'jdbc:tc:postgresql:9.6.8:///em_test_db'
+  liquibase:
+    contexts: e2e
+  jpa:
+    show-sql: true
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

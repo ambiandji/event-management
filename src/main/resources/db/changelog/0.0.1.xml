@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="em-01:01" author="brice.mbiandji">
+        <createTable tableName="t_artist">
+            <column autoIncrement="false" name="c_id" type="varchar(255)">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="pk_artist"/>
+            </column>
+            <column name="c_created_at" type="datetime"/>
+            <column name="c_update_at" type="datetime"/>
+            <column name="c_name" type="varchar(128)"/>
+            <column name="c_phone" type="varchar(32)"/>
+            <column name="c_city" type="varchar(64)"/>
+            <column name="c_facebook_link" type="varchar(512)" />
+            <column name="c_image_link" type="varchar(512)" />
+            <column name="c_website_link" type="varchar(512)" />
+            <column name="c_seeking_venue" type="bool" defaultValueBoolean="false"/>
+            <column name="c_seeking_description" type="varchar(512)" />
+        </createTable>
+    </changeSet>
+    <changeSet id="em-01:02" author="brice.mbiandji" context="repository">
+        <insert tableName="t_artist">
+            <column name="c_id" value="6a12e5b6-9397-4e7f-8fea-83a0e1c75277"/>
+            <column name="c_created_at" value="2022-09-10T13:34:27"/>
+            <column name="c_name" value="Artist_findAll_name_1"/>
+            <column name="c_phone" value="Artist_findAll_phone_1"/>
+            <column name="c_city" value="Artist_findAll_city_1"/>
+        </insert>
+        <insert tableName="t_artist">
+            <column name="c_id" value="22b07a69-bfc7-4218-a9c9-c890fa6beb3c"/>
+            <column name="c_created_at" value="2022-09-10T13:3:35"/>
+            <column name="c_name" value="Artist_findAll_name_2"/>
+            <column name="c_phone" value="Artist_findAll_phone_2"/>
+            <column name="c_city" value="Artist_findAll_city_2"/>
+            <column name="c_facebook_link" value="http://Artist_findAll_facebook_link_2"/>
+            <column name="c_image_link" value="http://Artist_findAll_image_link_2"/>
+            <column name="c_website_link" value="http://Artist_findAll_website_link_2"/>
+            <column name="c_seeking_venue" valueBoolean="true"/>
+            <column name="c_seeking_description" value="Artist_findAll_seeking_description_2"/>
+        </insert>
+
+    </changeSet>
+    <changeSet id="em-01:03" author="brice.adrien" context="repository">
+        <insert tableName="t_artist">
+            <column name="c_id" value="19440509-759c-42cd-bc4e-168df7151d89"/>
+            <column name="c_created_at" value="2022-09-10T16:40:35"/>
+            <column name="c_name" value="Artist_findByPhone_name"/>
+            <column name="c_phone" value="Artist_findByPhone_phone"/>
+            <column name="c_city" value="Artist_findByPhone_city"/>
+            <column name="c_facebook_link" value="http://Artist_findByPhone_facebook_link"/>
+            <column name="c_image_link" value="http://Artist_findByPhone_image_link"/>
+            <column name="c_website_link" value="http://Artist_findByPhone_website_link"/>
+            <column name="c_seeking_venue" valueBoolean="true"/>
+            <column name="c_seeking_description" value="Artist_findByPhone_seeking_description"/>
+        </insert>
+        <insert tableName="t_artist">
+            <column name="c_id" value="885a9e83-cb9c-4e62-817a-fd1653489710"/>
+            <column name="c_created_at" value="2022-09-10T16:41:48"/>
+            <column name="c_name" value="Artist_findByFacebookLink_name"/>
+            <column name="c_phone" value="Artist_findByFacebookLink_phone"/>
+            <column name="c_city" value="Artist_findByFacebookLink_city"/>
+            <column name="c_facebook_link" value="http://Artist_findByFacebookLink_facebook_link"/>
+            <column name="c_image_link" value="http://Artist_findByFacebookLink_image_link"/>
+            <column name="c_website_link" value="http://Artist_findByFacebookLink_website_link"/>
+            <column name="c_seeking_venue" valueBoolean="true"/>
+            <column name="c_seeking_description" value="Artist_findByFacebookLink_seeking_description"/>
+        </insert>
+        <insert tableName="t_artist">
+            <column name="c_id" value="f42160ff-fdd7-41f2-a0cb-521f7e0e128c"/>
+            <column name="c_created_at" value="2022-09-10T16:41:59"/>
+            <column name="c_name" value="Artist_findByImageLink_name"/>
+            <column name="c_phone" value="Artist_findByImageLink_phone"/>
+            <column name="c_city" value="Artist_findByImageLink_city"/>
+            <column name="c_facebook_link" value="http://Artist_findByImageLink_facebook_link"/>
+            <column name="c_image_link" value="http://Artist_findByImageLink_image_link"/>
+            <column name="c_website_link" value="http://Artist_findByImageLink_website_link"/>
+            <column name="c_seeking_venue" valueBoolean="true"/>
+            <column name="c_seeking_description" value="Artist_findByImageLink_seeking_description"/>
+        </insert>
+        <insert tableName="t_artist">
+            <column name="c_id" value="4c5266e7-6159-4426-b5ea-163b243e191a"/>
+            <column name="c_created_at" value="2022-09-10T16:42:23"/>
+            <column name="c_name" value="Artist_findByWebsiteLink_name"/>
+            <column name="c_phone" value="Artist_findByWebsiteLink_phone"/>
+            <column name="c_city" value="Artist_findByWebsiteLink_city"/>
+            <column name="c_facebook_link" value="http://Artist_findByWebsiteLink_facebook_link"/>
+            <column name="c_image_link" value="http://Artist_findByWebsiteLink_image_link"/>
+            <column name="c_website_link" value="http://Artist_findByWebsiteLink_website_link"/>
+            <column name="c_seeking_venue" valueBoolean="true"/>
+            <column name="c_seeking_description" value="Artist_findByWebsiteLink_seeking_description"/>
+        </insert>
+    </changeSet>
+    <changeSet id="em-01:04" author="brice.mbiandji" context="e2e">
+        <insert tableName="t_artist">
+            <column name="c_id" value="b0097ecc-af81-4152-90d6-dbd7ae0865b7"/>
+            <column name="c_created_at" value="2022-09-10T20:47:58"/>
+            <column name="c_name" value="Artist_e2e_create_name_1"/>
+            <column name="c_phone" value="Artist_e2e_create_phone_1"/>
+            <column name="c_city" value="Artist_e2e_create_city_1"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

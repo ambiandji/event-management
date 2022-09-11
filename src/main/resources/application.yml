@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    hikari:
+      connectionTimeout: '20000'
+      maximumPoolSize: '5'
+    password: java123
+    username: java
+    url: jdbc:postgresql://localhost:5432/em_db
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  sql:
+    init:
+      mode: always
+  liquibase:
+    change-log: classpath:db/changelog/master.xml
+    enabled: true
+    contexts: ${LIQUIBASE_CONTEXT}
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG

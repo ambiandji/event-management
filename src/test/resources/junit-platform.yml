@@ -1,0 +1,14 @@
+cucumber:
+  glue: org.crok4it.em.e2e.steps
+  plugin: pretty, junit:target/cucumber-reports/Cucumber.xml, json:target/cucumber-reports/Cucumber.json, html:target/cucumber-reports/Cucumber.html
+  execution:
+    parallel:
+      enabled: true
+      config:
+        strategy: fixed
+        fixed:
+          parallelism: 5
+  publish:
+    enabled: true
+  junitPlatform:
+    namingStrategy: long

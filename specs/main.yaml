@@ -1,9 +1,136 @@
 openapi: 3.0.3
 info:
-  title: Title
-  description: Title
+  title: Event Management
+  description: API to manage Artist en Venue and Shows
   version: 1.0.0
 servers:
   - url: 'https'
 paths:
-  
+  /artist:
+    post:
+      tags:
+        - Artist
+      summary: Create a new artist
+      description: Create a new artist in database
+      operationId: createArtist
+      security:
+        - oAuth:
+            - artist:create
+      requestBody:
+        description: Artist DTO that we need to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistDTO'
+      responses:
+        201:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+components:
+  securitySchemes:
+    oAuth:
+      type: oauth2
+      description: This API uses OAuth 2 with the Authorization Code grant flow.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.oauth.lao-sarl.cm
+          tokenUrl: https://token.oauth.lao-sarl.cm
+          scopes:
+            artist:create: Create Artist
+  schemas:
+    ArtistDTO:
+      type: object
+      required:
+        - name
+        - city
+        - phone
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          pattern: ^(?!\s*$).+ #not accepting empty string
+        city:
+          type: string
+          pattern: ^(?!\s*$).+ #not accepting empty string
+        phone:
+          type: string
+          pattern: ^(?!\s*$).+ #not accepting empty string
+        imageLink:
+          type: string
+        facebookLink:
+          type: string
+        websiteLink:
+          type: string
+        seekingVenue:
+          type: boolean
+        seekingDescription:
+          type: string
+    BaseResponse:
+      discriminator:
+        propertyName: responseType
+        mapping:
+          errorResponse: '#/components/schemas/ErrorResponse'
+          successResponse: '#/components/schemas/SuccessResponse'
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+        responseType:
+          type: string
+    ErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            field:
+              type: string
+    ErrorResponses:
+      type: object
+      required:
+        - code
+        - timestamp
+        - path
+        - errors
+      properties:
+        code:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+        path:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorResponse'
+    SuccessResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            success:
+              type: boolean
+            result:
+              type: array
+              items:
+                type: object
