@@ -85,4 +85,18 @@ public class ArtisteResource implements ArtistApi {
                         .result(Collections.singletonList(artistDTOS)));
     }
 
+    @Override
+    public ResponseEntity<SuccessResponse> updateArtistById(UUID id, ArtistDTO artistDTO)  {
+        try {
+            artistDTO = artistService.update(id.toString(), artistDTO);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.status(OK).body(
+                new SuccessResponse()
+                        .success(true)
+                        .message("Artist updated successfully")
+                        .result(Collections.singletonList(artistDTO)));
+    }
+
 }

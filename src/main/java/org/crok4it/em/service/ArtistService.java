@@ -1,6 +1,5 @@
 package org.crok4it.em.service;
 
-import org.crok4it.em.domain.Artist;
 import org.crok4it.em.dto.ArtistDTO;
 
 import java.util.List;
@@ -16,8 +15,7 @@ public interface ArtistService {
     List<ArtistDTO> findAll();
 
     void deleteById(String id);
-    /*Artist findByPhone(String phone);
-    Artist findByFacebookLink(String facebookLink);
-    Artist findByImageLink(String imageLink);
-    Artist findByWebsiteLink(String websiteLink);*/
+
+    ArtistDTO update(String id, ArtistDTO artistDTO) throws NoSuchMethodException;
+
 }

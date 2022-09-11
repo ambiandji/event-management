@@ -5,6 +5,7 @@ import org.crok4it.em.dto.ArtistDTO;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(
         uses = {
@@ -34,4 +35,8 @@ public interface ArtistMapper {
         @Mapping(source = "seekingVenue", target = "seekingVenue")
         @Mapping(source = "seekingDescription", target = "seekingDescription")
         ArtistDTO toDto(Artist artist);
+
+        @Mapping(target = "id", ignore = true)
+        Artist fromDTOForUpdate(@MappingTarget Artist question, ArtistDTO artistDTO);
+
 }

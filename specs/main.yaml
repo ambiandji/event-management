@@ -149,6 +149,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponses'
+    put:
+      tags:
+        - Artist
+      summary: Update artist buy id
+      description: Update artist buy id
+      operationId: UpdateArtistById
+      security:
+        - oAuth:
+            - artist:update
+      parameters:
+        - name: id
+          in: path
+          description: Artist id to be updated
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Artist DTO that we need to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArtistDTO'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+
     delete:
       tags:
         - Artist

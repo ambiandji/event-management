@@ -1,6 +1,5 @@
 package org.crok4it.em.e2e.steps;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jayway.jsonpath.JsonPath;
@@ -26,10 +25,10 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.crok4it.em.constant.ArtistConstant.API_ARTIST_BASE_ROUTE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -232,6 +231,74 @@ public class ArtistSteps implements En{
                             .andDo(print())
                             .andExpect(status().isNotFound())
                             .andReturn();
+        });
+        And("The following artist is store in database",
+                (DataTable dataTable) -> {
+
+                String id = dataTable.asMaps().get(0).get("id");
+
+                Map<String, String> artistAsMap = dataTable.asMaps().get(0);
+
+                ArtistDTO dbArtistDTO = jdbcTemplate.queryForObject(
+                        String.format("SELECT * FROM t_artist WHERE c_id = '%s'", id),
+                        new ArtistDTORowMapper()
+                );
+
+                assertThat(dbArtistDTO)
+                        .isNotNull()
+                        .returns(UUID.fromString(artistAsMap.get("id")), ArtistDTO::getId)
+                        .returns(artistAsMap.get("name"), ArtistDTO::getName)
+                        .returns(artistAsMap.get("phone"), ArtistDTO::getPhone)
+                        .returns(artistAsMap.get("city"), ArtistDTO::getCity);
+        });
+        When("I update artist with id {string} with the following data",
+                (String id, DataTable dataTable) -> {
+
+                ArtistDTO artistDataTable = getArtistFromFeature(dataTable);
+
+                MvcResult result = mvc.perform(put(API_ARTIST_BASE_ROUTE + "/" + id)
+                                .accept(APPLICATION_JSON)
+                                .contentType(APPLICATION_JSON)
+                                .content(BaseResourceTest.asJsonString(artistDataTable))
+                        )
+                        .andDo(print())
+                        .andExpect(status().isOk())
+                        .andReturn();
+                artistDTO = parseJsonToObject(result);
+
+                assertThat(artistDTO)
+                        .isNotNull()
+                        .isInstanceOf(ArtistDTO.class);
+        });
+        Then("I should the following artist is saved to database",
+                (DataTable dataTable) -> {
+
+            Map<String, String> artistAsMap = dataTable.asMaps().get(0);
+
+            assertThat(artistDTO)
+                    .isNotNull()
+                    .returns(UUID.fromString(artistAsMap.get("id")), ArtistDTO::getId)
+                    .returns(artistAsMap.get("name"), ArtistDTO::getName)
+                    .returns(artistAsMap.get("phone"), ArtistDTO::getPhone)
+                    .returns(artistAsMap.get("city"), ArtistDTO::getCity);
+        });
+
+        Then("The attempt to update an artist with the id {string} and following data will fail with status error {string} and error code {string}",
+                (String id, String httpStatus, String errorCode, DataTable dataTable) -> {
+
+                ArtistDTO artistDataTable = getArtistFromFeature(dataTable);
+
+                MvcResult result = mvc.perform(put(API_ARTIST_BASE_ROUTE + "/" + id)
+                                .accept(APPLICATION_JSON)
+                                .contentType(APPLICATION_JSON)
+                                .content(BaseResourceTest.asJsonString(artistDataTable))
+                        )
+                        .andDo(print())
+                        .andExpect(status().isNotFound())
+                        .andReturn();
+                assertThat(result.getResponse().getStatus()).isEqualTo(Integer.valueOf(errorCode));
+                assertThat(HttpStatus.valueOf(result.getResponse().getStatus()).name()).isEqualTo(httpStatus);
+
         });
 
     }

@@ -15,22 +15,16 @@ import org.mockito.InOrder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ArtistServiceImplTest {
 
@@ -202,6 +196,54 @@ public class ArtistServiceImplTest {
 
         InOrder inOrder = inOrder(artistRepository);
         inOrder.verify(artistRepository).findById(artistId);
+
+    }
+
+    @Test
+    @DisplayName("Update artist by id from database")
+    void updateArtistByExistingIdShouldSuccess() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        String artistId = UUID.randomUUID().toString();
+        Artist artist = mock(Artist.class);
+        ArtistDTO artistDTO = mock(ArtistDTO.class);
+        String phone = "Artist_create_phone";
+
+        when(artistRepository.findById(artistId)).thenReturn(Optional.of(artist));
+
+        when(artistDTO.getPhone()).thenReturn(phone);
+        when(method.invoke(artistService, "findByPhone")).thenReturn(null);
+        when(artistRepository.findByPhone(phone)).thenReturn(Optional.empty());
+
+        when(artistMapper.fromDTOForUpdate(artist, artistDTO)).thenReturn(artist);
+        when(artistRepository.saveAndFlush(artist)).thenReturn(artist);
+        when(artistMapper.toDto(artist)).thenReturn(artistDTO);
+
+        assertThat(artistService.update(artistId, artistDTO)).isEqualTo(artistDTO);
+
+        InOrder inOrder = inOrder(artistRepository, artistMapper);
+        inOrder.verify(artistRepository).findById(artistId);
+        inOrder.verify(artistMapper).fromDTOForUpdate(artist, artistDTO);
+        inOrder.verify(artistRepository).saveAndFlush(artist);
+
+
+
+    }
+
+    @Test
+    @DisplayName("Update artist by wrong id from database")
+    void updateArtistByWrongIdShouldFail() {
+        String artistId = UUID.randomUUID().toString();
+        ArtistDTO artistDTO = mock(ArtistDTO.class);
+
+        when(artistRepository.findById(artistId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> artistService.update(artistId, artistDTO))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage(String.format("Artist with id %s not found", artistId));
+
+        InOrder inOrder = inOrder(artistRepository, artistMapper);
+        inOrder.verify(artistRepository).findById(artistId);
+
+
 
     }
 

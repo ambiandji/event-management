@@ -1,7 +1,6 @@
 package org.crok4it.em.exception;
 
 import lombok.Getter;
-import org.crok4it.em.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

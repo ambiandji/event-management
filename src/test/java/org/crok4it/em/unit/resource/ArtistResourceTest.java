@@ -14,8 +14,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -206,5 +204,44 @@ public class ArtistResourceTest extends BaseResourceTest{
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    @DisplayName("Update artist by existing id from database")
+    void updateArtistByExistingIdShouldSuccess() throws Exception {
+        UUID artistId = UUID.randomUUID();
+        String message = "Artist updated successfully";
+
+        when(artisService.update(artistId.toString(), artistDTO)).thenReturn(artistDTO);
+
+        mvc.perform(put(API_ARTIST_BASE_ROUTE + "/" + artistId)
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .content(BaseResourceTest.asJsonString(artistDTO)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]").value(artistDTO))
+                .andExpect(jsonPath("$.result[0].name").value(artistDTO.getName()))
+                .andExpect(jsonPath("$.result[0].phone").value(artistDTO.getPhone()))
+                .andExpect(jsonPath("$.message").value(message))
+                .andExpect(jsonPath("$.success").value(true));
+    }
+
+    @Test
+    @DisplayName("Update artist by existing id from database")
+    void updateArtistByWrongIdShouldFail() throws Exception {
+        UUID artistId = UUID.randomUUID();
+
+        when(artisService.update(artistId.toString(), artistDTO)).thenThrow(ResourceNotFoundException.class);
+
+        mvc.perform(put(API_ARTIST_BASE_ROUTE + "/" + artistId)
+                        .contentType(APPLICATION_JSON)
+                        .accept(APPLICATION_JSON)
+                        .content(BaseResourceTest.asJsonString(artistDTO)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+
 
 }

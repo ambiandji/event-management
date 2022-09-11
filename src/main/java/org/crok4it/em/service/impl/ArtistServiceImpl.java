@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     @Transactional
     public UUID createArtist(ArtistDTO artistDTO) throws NoSuchMethodException {
-        validateArtistDTO(artistDTO);
+        validateArtistDTO(null, artistDTO);
         Artist artist = artistMapper.toEntity(artistDTO);
         artist = artistRepository.saveAndFlush(artist);
         return UUID.fromString(artist.getId());
@@ -70,6 +71,21 @@ public class ArtistServiceImpl implements ArtistService {
         artistRepository.deleteById(id);
     }
 
+    @Override
+    public ArtistDTO update(String id, ArtistDTO artistDTO) throws NoSuchMethodException {
+        Optional<Artist> optionalArtist = artistRepository.findById(id);
+        if (optionalArtist.isPresent()) {
+            validateArtistDTO(id, artistDTO);
+            Artist artist = artistRepository.saveAndFlush(artistMapper.fromDTOForUpdate(optionalArtist.get(), artistDTO));
+            return artistMapper.toDto(artist);
+        } else {
+            log.error("Artist with id {} not found", id);
+            throw new ResourceNotFoundException(
+                    String.format("Artist with id %s not found", id), ErrorCode.ARTIST_NOT_FOUND);
+        }
+
+    }
+
     //@Override
     public Artist findByPhone(String phone) {
         return artistRepository.findByPhone(phone).orElse(null);
@@ -90,18 +106,18 @@ public class ArtistServiceImpl implements ArtistService {
         return artistRepository.findByWebsiteLinkIgnoreCase(websiteLink).orElse(null);
     }
 
-    private void validateArtistDTO(ArtistDTO artistDTO) throws NoSuchMethodException {
+    private void validateArtistDTO(String id, ArtistDTO artistDTO) throws NoSuchMethodException {
         // verify if phone number is unique
-        validatePhone(null, artistDTO.getPhone());
+        validatePhone(id, artistDTO.getPhone());
         // verify if facebook link number is unique
         if (artistDTO.getFacebookLink() != null && !artistDTO.getFacebookLink().isEmpty())
-            validateFacebookLink(null, artistDTO.getFacebookLink());
+            validateFacebookLink(id, artistDTO.getFacebookLink());
         // verify if image link number is unique
         if(artistDTO.getImageLink() != null && !artistDTO.getImageLink().isEmpty())
-            validateImageLink(null, artistDTO.getImageLink());
+            validateImageLink(id, artistDTO.getImageLink());
         // verify if website link number is unique
         if(artistDTO.getWebsiteLink() != null && !artistDTO.getWebsiteLink().isEmpty())
-            validateWebsiteLink(null, artistDTO.getWebsiteLink());
+            validateWebsiteLink(id, artistDTO.getWebsiteLink());
     }
 
     private void validateWebsiteLink(String id, String value) throws NoSuchMethodException {

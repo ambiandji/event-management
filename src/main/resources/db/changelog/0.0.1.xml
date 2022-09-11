@@ -119,4 +119,13 @@
             <column name="c_city" value="Artist_e2e_DeleteById_city_1"/>
         </insert>
     </changeSet>
+    <changeSet id="em-02:03" author="brice.adrien" context="e2e">
+        <insert tableName="t_artist">
+            <column name="c_id" value="ad7bbfa1-9bab-424f-a694-bdaab6990138"/>
+            <column name="c_created_at" value="2022-09-11T13:08:16"/>
+            <column name="c_name" value="Artist_e2e_updateById_name_1"/>
+            <column name="c_city" value="Artist_e2e_updateById_city_1"/>
+            <column name="c_phone" value="Artist_e2e_updateById_phone_1"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

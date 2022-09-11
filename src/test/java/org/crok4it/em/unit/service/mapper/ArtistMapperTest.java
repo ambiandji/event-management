@@ -9,8 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -91,5 +89,22 @@ public class ArtistMapperTest {
                 .returns(websiteLink, ArtistDTO::getWebsiteLink)
                 .returns(seekingVenue, ArtistDTO::getSeekingVenue)
                 .returns(seekingDescription, ArtistDTO::getSeekingDescription);
+    }
+
+    @Test
+    @DisplayName("Convert dto to entity fetch from database")
+    void fromDTOtoEntityForUpdate() {
+        artistDTO.setId(null);
+
+        artist.setPhone(null);
+        artist.setName(null);
+        artist.setCity(null);
+
+        artist = artistMapper.fromDTOForUpdate(artist, artistDTO);
+         assertThat(artist)
+                 .isNotNull()
+                 .returns(artistDTO.getName(), Artist::getName)
+                 .returns(artistDTO.getPhone(), Artist::getPhone)
+                 .returns(artistDTO.getCity(), Artist::getCity);
     }
 }
