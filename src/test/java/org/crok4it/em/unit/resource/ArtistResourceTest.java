@@ -14,13 +14,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
+
 import java.util.UUID;
 
 import static org.crok4it.em.constant.ArtistConstant.API_ARTIST_BASE_ROUTE;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -89,7 +92,7 @@ public class ArtistResourceTest extends BaseResourceTest{
 
     @Test
     @DisplayName("Create artist with facebook link already store in database")
-    void CreateArtistWithDuplicateFacebookLinkShouldFail() throws Exception {
+    void createArtistWithDuplicateFacebookLinkShouldFail() throws Exception {
 
         when(artisService.createArtist(artistDTO)).thenThrow(ConflictException.class);
 
@@ -99,5 +102,36 @@ public class ArtistResourceTest extends BaseResourceTest{
                 .content(BaseResourceTest.asJsonString(artistDTO)))
             .andDo(print())
             .andExpect(status().isConflict());
+    }
+
+    @Test
+    @DisplayName("Fetch artist by existing id from database")
+    void fetchArtistByExistingIdShouldSuccess() throws Exception {
+        UUID artistId = UUID.randomUUID();
+        String message = "Artist fetch successfully";
+
+        when(artisService.findById(artistId.toString())).thenReturn(artistDTO);
+
+        mvc.perform(get(API_ARTIST_BASE_ROUTE + "/" + artistId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]").value(artistDTO))
+                .andExpect(jsonPath("$.result[0].name").value(artistDTO.getName()))
+                .andExpect(jsonPath("$.result[0].phone").value(artistDTO.getPhone()))
+                .andExpect(jsonPath("$.message").value(message))
+                .andExpect(jsonPath("$.success").value(true));
+    }
+
+    @Test
+    @DisplayName("Fetch artist with wrong id from database")
+    void fetchArtistWithWrongIdShouldFail() throws Exception {
+        UUID artistId = UUID.randomUUID();
+
+        when(artisService.findById(artistId.toString())).thenThrow(ResourceNotFoundException.class);
+
+        mvc.perform(get(API_ARTIST_BASE_ROUTE + "/" + artistId))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 }

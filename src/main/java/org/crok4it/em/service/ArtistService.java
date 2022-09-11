@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public interface ArtistService {
     UUID createArtist(ArtistDTO artistDTO) throws NoSuchMethodException;
+
+    ArtistDTO findById(String id);
     /*Artist findByPhone(String phone);
     Artist findByFacebookLink(String facebookLink);
     Artist findByImageLink(String imageLink);

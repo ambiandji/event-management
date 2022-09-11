@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import static org.crok4it.em.constant.CommonConstant.API_BASE_ROUTE;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping(API_BASE_ROUTE)
@@ -40,4 +41,15 @@ public class ArtisteResource implements ArtistApi {
                                 .result(Collections.singletonList(artistId)));
 
     }
+
+    @Override
+    public ResponseEntity<SuccessResponse> findArtistById(UUID id) {
+        ArtistDTO artistDTO = artistService.findById(id.toString());
+        return ResponseEntity.status(OK).body(
+                new SuccessResponse()
+                        .success(true)
+                        .message("Artist fetch successfully")
+                        .result(Collections.singletonList(artistDTO)));
+    }
+
 }

@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.crok4it.em.domain.Artist;
 import org.crok4it.em.dto.ArtistDTO;
 import org.crok4it.em.exception.ConflictException;
+import org.crok4it.em.exception.ErrorCode;
+import org.crok4it.em.exception.ResourceNotFoundException;
 import org.crok4it.em.repository.ArtistRepository;
 import org.crok4it.em.service.ArtistService;
 import org.crok4it.em.service.mapper.ArtistMapper;
@@ -30,6 +32,14 @@ public class ArtistServiceImpl implements ArtistService {
         Artist artist = artistMapper.toEntity(artistDTO);
         artist = artistRepository.saveAndFlush(artist);
         return UUID.fromString(artist.getId());
+    }
+
+    @Override
+    public ArtistDTO findById(String id) {
+        return artistRepository.findById(id)
+                .map(artistMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        String.format("Artist with id %s not found", id), ErrorCode.ARTIST_NOT_FOUND));
     }
 
     //@Override
@@ -70,7 +80,7 @@ public class ArtistServiceImpl implements ArtistService {
         if(checkIfFieldIsUnique(id, "findByWebsiteLink", value)) {
             log.error("Website link {} already used. Please change", value);
             throw new ConflictException(
-                    String.format("Website link %s already used. Please change", value));
+                    String.format("Website link %s already used. Please change", value), ErrorCode.ARTIST_CONFLICT);
         }
     }
 
@@ -78,7 +88,7 @@ public class ArtistServiceImpl implements ArtistService {
         if(checkIfFieldIsUnique(id, "findByImageLink", value)) {
             log.error("Image link {} already used. Please change", value);
             throw new ConflictException(
-                    String.format("Image link %s already used. Please change", value));
+                    String.format("Image link %s already used. Please change", value), ErrorCode.ARTIST_CONFLICT);
         }
     }
 
@@ -86,7 +96,7 @@ public class ArtistServiceImpl implements ArtistService {
         if(checkIfFieldIsUnique(id, "findByFacebookLink", value)) {
             log.error("Facebook link {} already used. Please change", value);
             throw new ConflictException(
-                    String.format("Facebook link %s already used. Please change", value));
+                    String.format("Facebook link %s already used. Please change", value), ErrorCode.ARTIST_CONFLICT);
         }
 
     }
@@ -95,7 +105,7 @@ public class ArtistServiceImpl implements ArtistService {
         if(checkIfFieldIsUnique(id, "findByPhone", value)) {
             log.error("Phone number {} already used. Please change", value);
             throw new ConflictException(
-                    String.format("Phone number %s already used. Please change", value));
+                    String.format("Phone number %s already used. Please change", value), ErrorCode.ARTIST_CONFLICT);
         }
     }
 

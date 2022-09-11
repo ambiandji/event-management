@@ -43,13 +43,24 @@ public class ArtistMapperTest {
                 .seekingVenue(seekingVenue)
                 .seekingDescription(seekingDescription);
 
+        artist= Artist.builder()
+                .id(id.toString())
+                .name(name)
+                .phone(phone)
+                .city(city)
+                .imageLink(imageLink)
+                .facebookLink(facebookLink)
+                .websiteLink(websiteLink)
+                .seekingVenue(seekingVenue)
+                .seekingDescription(seekingDescription).build();
+
         artistMapper = new ArtistMapperImpl(new UuidMapperImpl());
     }
 
     @Test
     @DisplayName("Convert artist dto to entity")
     void dtoToEntityTest() {
-        artist = artistMapper.toEntity(artistDTO);
+       Artist artist = artistMapper.toEntity(artistDTO);
 
         assertThat(artist)
                 .isNotNull()
@@ -62,5 +73,23 @@ public class ArtistMapperTest {
                 .returns(websiteLink, Artist::getWebsiteLink)
                 .returns(seekingVenue, Artist::getSeekingVenue)
                 .returns(seekingDescription, Artist::getSeekingDescription);
+    }
+
+    @Test
+    @DisplayName("Convert artist entity to dto")
+    void entityToDtoTest() {
+        ArtistDTO artistDTO = artistMapper.toDto(artist);
+
+        assertThat(artistDTO)
+                .isNotNull()
+                .returns(id, ArtistDTO::getId)
+                .returns(name, ArtistDTO::getName)
+                .returns(phone, ArtistDTO::getPhone)
+                .returns(city, ArtistDTO::getCity)
+                .returns(facebookLink, ArtistDTO::getFacebookLink)
+                .returns(imageLink, ArtistDTO::getImageLink)
+                .returns(websiteLink, ArtistDTO::getWebsiteLink)
+                .returns(seekingVenue, ArtistDTO::getSeekingVenue)
+                .returns(seekingDescription, ArtistDTO::getSeekingDescription);
     }
 }

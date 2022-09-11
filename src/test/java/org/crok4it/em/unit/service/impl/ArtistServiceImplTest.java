@@ -3,6 +3,7 @@ package org.crok4it.em.unit.service.impl;
 import org.crok4it.em.domain.Artist;
 import org.crok4it.em.dto.ArtistDTO;
 import org.crok4it.em.exception.ConflictException;
+import org.crok4it.em.exception.ResourceNotFoundException;
 import org.crok4it.em.repository.ArtistRepository;
 import org.crok4it.em.service.ArtistService;
 import org.crok4it.em.service.impl.ArtistServiceImpl;
@@ -93,4 +94,39 @@ public class ArtistServiceImplTest {
         inOrder.verify(artistRepository).findByPhone(phone);
 
     }
+
+    @Test
+    @DisplayName("Fetch artist by id from database")
+    void findArtistByExistingIdShouldSuccess() {
+        String artistId = UUID.randomUUID().toString();
+        Artist artist = mock(Artist.class);
+        ArtistDTO artistDTO = mock(ArtistDTO.class);
+
+        when(artistRepository.findById(artistId)).thenReturn(Optional.of(artist));
+        when(artistMapper.toDto(artist)).thenReturn(artistDTO);
+
+        assertThat(artistService.findById(artistId)).isEqualTo(artistDTO);
+
+        InOrder inOrder = inOrder(artistRepository, artistMapper);
+        inOrder.verify(artistRepository).findById(artistId);
+        inOrder.verify(artistMapper).toDto(artist);
+
+    }
+    @Test
+    @DisplayName("Fetch artist with wrong id from database")
+    void findArtistWithWrongIdShouldFail() {
+        String artistId = UUID.randomUUID().toString();
+
+        when(artistRepository.findById(artistId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> artistService.findById(artistId))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage(String.format("Artist with id %s not found", artistId));
+
+        InOrder inOrder = inOrder(artistRepository);
+        inOrder.verify(artistRepository).findById(artistId);
+
+
+    }
+
 }

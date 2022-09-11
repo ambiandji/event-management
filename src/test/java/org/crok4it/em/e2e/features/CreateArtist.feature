@@ -11,7 +11,7 @@ Feature: Create Artist
 
   Scenario: Create a new artist without required data
     Given I am logged in with the scopes 'artist:create'
-    Then I should see that attempt to create a new artist will fail with status error 'BAD_REQUEST' and error code '400'
+    Then I should see that attempt to create a new artist with the following data will fail with status error 'BAD_REQUEST' and error code '400'
       | name                   | city | phone |
       | Artist_e2e_create_name |      |       |
 
@@ -20,7 +20,7 @@ Feature: Create Artist
     And Following data are in database
       | id                                   | name                     | city                     | phone                     |
       | b0097ecc-af81-4152-90d6-dbd7ae0865b7 | Artist_e2e_create_name_1 | Artist_e2e_create_city_1 | Artist_e2e_create_phone_1 |
-    Then I should see that attempt to create a new artist will fail with status error 'CONFLICT' and error code '409'
+    Then I should see that attempt to create a new artist with the following data will fail with status error 'CONFLICT' and error code '409'
       | name                     | city                     | phone                     |
       | Artist_e2e_create_name_2 | Artist_e2e_create_city_2 | Artist_e2e_create_phone_1 |
 
