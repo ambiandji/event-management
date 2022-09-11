@@ -2,8 +2,8 @@ Feature: Delete artist by id
 
   Scenario: Delete Artist with an existing id
     Given I am logged in with the scopes 'artist:read'
-    When I delete artist with id 'd7a4c906-4efe-42eb-808e-a772aa8da6e7'
-    Then I should the see that the artist with id 'd7a4c906-4efe-42eb-808e-a772aa8da6e7' is no longer in database and success message is 'Artiste deleted successfully'
+    When I delete artist with id 'b62af1c8-793a-4b0f-b191-810e96ab0de0'
+    Then I should the see that the artist with id 'b62af1c8-793a-4b0f-b191-810e96ab0de0' is no longer in database and success message is 'Artist deleted successfully'
 
   Scenario: Find Artist with wrong id
     Given I am logged in with the scopes 'artist:read'
