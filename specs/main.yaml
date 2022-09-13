@@ -4,7 +4,7 @@ info:
   description: API to manage Artist en Venue and Shows
   version: 1.0.0
 servers:
-  - url: 'https'
+  - url: 'http'
 paths:
   /artist:
     post:
@@ -241,6 +241,55 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponses'
+  /venue:
+    post:
+      tags:
+        - Venue
+      summary: Create a new venue
+      description: Create a new venue in database
+      operationId: createVenue
+      security:
+        - oAuth:
+            - venue:create
+      requestBody:
+        description: Venue DTO that we need to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VenueDTO'
+      responses:
+        201:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+
 components:
   securitySchemes:
     oAuth:
@@ -279,6 +328,35 @@ components:
         websiteLink:
           type: string
         seekingVenue:
+          type: boolean
+        seekingDescription:
+          type: string
+    VenueDTO:
+      type: object
+      required:
+        - name
+        - city
+        - phone
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          pattern: ^(?!\s*$).+ #not accepting empty string
+        city:
+          type: string
+          pattern: ^(?!\s*$).+ #not accepting empty string
+        phone:
+          type: string
+          pattern: ^(?!\s*$).+ #not accepting empty string
+        imageLink:
+          type: string
+        facebookLink:
+          type: string
+        websiteLink:
+          type: string
+        seekingTalent:
           type: boolean
         seekingDescription:
           type: string

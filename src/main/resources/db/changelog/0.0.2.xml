@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet id="em-08:01" author="brice.mbiandji">
+        <createTable tableName="t_venue">
+            <column autoIncrement="false" name="c_id" type="varchar(255)">
+                <constraints nullable="false" primaryKey="true"
+                             primaryKeyName="pk_venue"/>
+            </column>
+            <column name="c_created_at" type="datetime"/>
+            <column name="c_update_at" type="datetime"/>
+            <column name="c_name" type="varchar(128)"/>
+            <column name="c_phone" type="varchar(32)"/>
+            <column name="c_city" type="varchar(64)"/>
+            <column name="c_facebook_link" type="varchar(512)" />
+            <column name="c_image_link" type="varchar(512)" />
+            <column name="c_website_link" type="varchar(512)" />
+            <column name="c_seeking_talent" type="bool" defaultValueBoolean="false"/>
+            <column name="c_seeking_description" type="varchar(512)" />
+        </createTable>
+    </changeSet>
+    <changeSet id="em-08:02" author="brice.mbiandji" context="repository">
+        <insert tableName="t_venue">
+            <column name="c_id" value="6a12e5b6-9397-4e7f-8fea-83a0e1c75277"/>
+            <column name="c_created_at" value="2022-09-13T17:11:27"/>
+            <column name="c_name" value="Venue_findAll_name_1"/>
+            <column name="c_phone" value="Venue_findAll_phone_1"/>
+            <column name="c_city" value="Venue_findAll_city_1"/>
+        </insert>
+        <insert tableName="t_venue">
+            <column name="c_id" value="22b07a69-bfc7-4218-a9c9-c890fa6beb3c"/>
+            <column name="c_created_at" value="2022-09-13T17:58:35"/>
+            <column name="c_name" value="Venue_findAll_name_2"/>
+            <column name="c_phone" value="Venue_findAll_phone_2"/>
+            <column name="c_city" value="Venue_findAll_city_2"/>
+            <column name="c_facebook_link" value="http://Venue_findAll_facebook_link_2"/>
+            <column name="c_image_link" value="http://Venue_findAll_image_link_2"/>
+            <column name="c_website_link" value="http://Venue_findAll_website_link_2"/>
+            <column name="c_seeking_talent" valueBoolean="true"/>
+            <column name="c_seeking_description" value="Venue_findAll_seeking_description_2"/>
+        </insert>
+
+    </changeSet>
+    <changeSet id="em-08:03" author="brice.adrien" context="repository">
+        <insert tableName="t_venue">
+            <column name="c_id" value="19440509-759c-42cd-bc4e-168df7151d89"/>
+            <column name="c_created_at" value="2022-09-13T17:12:11"/>
+            <column name="c_name" value="Venue_findByPhone_name"/>
+            <column name="c_phone" value="Venue_findByPhone_phone"/>
+            <column name="c_city" value="Venue_findByPhone_city"/>
+            <column name="c_facebook_link" value="http://Venue_findByPhone_facebook_link"/>
+            <column name="c_image_link" value="http://Venue_findByPhone_image_link"/>
+            <column name="c_website_link" value="http://Venue_findByPhone_website_link"/>
+            <column name="c_seeking_talent" valueBoolean="true"/>
+            <column name="c_seeking_description" value="Venue_findByPhone_seeking_description"/>
+        </insert>
+        <insert tableName="t_venue">
+            <column name="c_id" value="885a9e83-cb9c-4e62-817a-fd1653489710"/>
+            <column name="c_created_at" value="2022-09-13T17:12:26"/>
+            <column name="c_name" value="Venue_findByFacebookLink_name"/>
+            <column name="c_phone" value="Venue_findByFacebookLink_phone"/>
+            <column name="c_city" value="Venue_findByFacebookLink_city"/>
+            <column name="c_facebook_link" value="http://Venue_findByFacebookLink_facebook_link"/>
+            <column name="c_image_link" value="http://Venue_findByFacebookLink_image_link"/>
+            <column name="c_website_link" value="http://Venue_findByFacebookLink_website_link"/>
+            <column name="c_seeking_talent" valueBoolean="true"/>
+            <column name="c_seeking_description" value="Venue_findByFacebookLink_seeking_description"/>
+        </insert>
+        <insert tableName="t_venue">
+            <column name="c_id" value="f42160ff-fdd7-41f2-a0cb-521f7e0e128c"/>
+            <column name="c_created_at" value="2022-09-13T17:12:35"/>
+            <column name="c_name" value="Venue_findByImageLink_name"/>
+            <column name="c_phone" value="Venue_findByImageLink_phone"/>
+            <column name="c_city" value="Venue_findByImageLink_city"/>
+            <column name="c_facebook_link" value="http://Venue_findByImageLink_facebook_link"/>
+            <column name="c_image_link" value="http://Venue_findByImageLink_image_link"/>
+            <column name="c_website_link" value="http://Venue_findByImageLink_website_link"/>
+            <column name="c_seeking_talent" valueBoolean="true"/>
+            <column name="c_seeking_description" value="Venue_findByImageLink_seeking_description"/>
+        </insert>
+        <insert tableName="t_venue">
+            <column name="c_id" value="4c5266e7-6159-4426-b5ea-163b243e191a"/>
+            <column name="c_created_at" value="2022-09-13T17:12:43"/>
+            <column name="c_name" value="Venue_findByWebsiteLink_name"/>
+            <column name="c_phone" value="Venue_findByWebsiteLink_phone"/>
+            <column name="c_city" value="Venue_findByWebsiteLink_city"/>
+            <column name="c_facebook_link" value="http://Venue_findByWebsiteLink_facebook_link"/>
+            <column name="c_image_link" value="http://Venue_findByWebsiteLink_image_link"/>
+            <column name="c_website_link" value="http://Venue_findByWebsiteLink_website_link"/>
+            <column name="c_seeking_talent" valueBoolean="true"/>
+            <column name="c_seeking_description" value="Venue_findByWebsiteLink_seeking_description"/>
+        </insert>
+    </changeSet>
+    <changeSet id="em-08:04" author="brice.mbiandji" context="e2e">
+        <insert tableName="t_venue">
+            <column name="c_id" value="b0097ecc-af81-4152-90d6-dbd7ae0865b7"/>
+            <column name="c_created_at" value="2022-09-13T17:12:57"/>
+            <column name="c_name" value="Venue_e2e_create_name_1"/>
+            <column name="c_phone" value="Venue_e2e_create_phone_1"/>
+            <column name="c_city" value="Venue_e2e_create_city_1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="em-02:01" author="brice.adrien" context="e2e">
+        <insert tableName="t_venue">
+            <column name="c_id" value="d7a4c906-4efe-42eb-808e-a772aa8da6e7"/>
+            <column name="c_created_at" value="2022-09-11T08:21:40"/>
+            <column name="c_name" value="Venue_e2e_findById_name_1"/>
+            <column name="c_phone" value="Venue_e2e_findById_phone_1"/>
+            <column name="c_city" value="Venue_e2e_findById_city_1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="em-02:02" author="brice.adrien" context="e2e">
+        <insert tableName="t_venue">
+            <column name="c_id" value="b62af1c8-793a-4b0f-b191-810e96ab0de0"/>
+            <column name="c_created_at" value="2022-09-11T12:30:40"/>
+            <column name="c_name" value="Venue_e2e_DeleteById_name_1"/>
+            <column name="c_phone" value="Venue_e2e_DeleteById_phone_1"/>
+            <column name="c_city" value="Venue_e2e_DeleteById_city_1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="em-02:03" author="brice.adrien" context="e2e">
+        <insert tableName="t_venue">
+            <column name="c_id" value="ad7bbfa1-9bab-424f-a694-bdaab6990138"/>
+            <column name="c_created_at" value="2022-09-11T13:08:16"/>
+            <column name="c_name" value="Venue_e2e_updateById_name_1"/>
+            <column name="c_city" value="Venue_e2e_updateById_city_1"/>
+            <column name="c_phone" value="Venue_e2e_updateById_phone_1"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

@@ -21,7 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Service
+@Service("artistService")
 @RequiredArgsConstructor
 public class ArtistServiceImpl implements ArtistService {
 
@@ -86,22 +86,19 @@ public class ArtistServiceImpl implements ArtistService {
 
     }
 
-    //@Override
     public Artist findByPhone(String phone) {
         return artistRepository.findByPhone(phone).orElse(null);
     }
 
-    //@Override
+
     public Artist findByFacebookLink(String facebookLink) {
         return artistRepository.findByFacebookLinkIgnoreCase(facebookLink).orElse(null);
     }
 
-    //@Override
     public Artist findByImageLink(String imageLink) {
         return artistRepository.findByImageLinkIgnoreCase(imageLink).orElse(null);
     }
 
-    //@Override
     public Artist findByWebsiteLink(String websiteLink) {
         return artistRepository.findByWebsiteLinkIgnoreCase(websiteLink).orElse(null);
     }

@@ -5,7 +5,7 @@ Feature: Create Artist
     When I create a new artist with the following data
       | name                   | city                   | phone                   |
       | Artist_e2e_create_name | Artist_e2e_create_city | Artist_e2e_create_phone |
-    Then I should see that the current identifier has the following data
+    Then I should see that the current artist identifier has the following data
       | name                   | city                   | phone                   |
       | Artist_e2e_create_name | Artist_e2e_create_city | Artist_e2e_create_phone |
 
@@ -17,7 +17,7 @@ Feature: Create Artist
 
   Scenario: Create a new artist with duplicate phone number
     Given I am logged in with the scopes 'artist:create'
-    And Following data are in database
+    And Following artist is in database
       | id                                   | name                     | city                     | phone                     |
       | b0097ecc-af81-4152-90d6-dbd7ae0865b7 | Artist_e2e_create_name_1 | Artist_e2e_create_city_1 | Artist_e2e_create_phone_1 |
     Then I should see that attempt to create a new artist with the following data will fail with status error 'CONFLICT' and error code '409'

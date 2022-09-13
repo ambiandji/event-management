@@ -69,7 +69,7 @@ public class ArtistSteps implements En{
                     .isNotNull()
                     .isInstanceOf(UUID.class);
         });
-        Then("I should see that the current identifier has the following data",
+        Then("I should see that the current artist identifier has the following data",
                 (DataTable dataTable) -> {
 
             Map<String, String> artistAsMap = dataTable.asMaps().get(0);
@@ -86,7 +86,7 @@ public class ArtistSteps implements En{
                     .returns(artistAsMap.get("city"), ArtistDTO::getCity);
 
         });
-        And("Following data are in database",
+        And("Following artist is in database",
                 (DataTable dataTable) -> {
             assertThat(
                     dataTable

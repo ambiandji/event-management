@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ArtisRepositoryTest extends BaseRepositoryTest{
+public class ArtistRepositoryTest extends BaseRepositoryTest{
 
     @Autowired
     private ArtistRepository artistRepository;

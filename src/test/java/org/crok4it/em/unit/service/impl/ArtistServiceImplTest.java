@@ -8,10 +8,17 @@ import org.crok4it.em.repository.ArtistRepository;
 import org.crok4it.em.service.ArtistService;
 import org.crok4it.em.service.impl.ArtistServiceImpl;
 import org.crok4it.em.service.mapper.ArtistMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -21,12 +28,18 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.clearAllCaches;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_CLASS;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_CLASS;
 
-public class ArtistServiceImplTest {
+@DirtiesContext(classMode= BEFORE_CLASS)
+public class ArtistServiceImplTest{
 
     ArtistMapper artistMapper;
     ArtistRepository artistRepository;
@@ -40,6 +53,11 @@ public class ArtistServiceImplTest {
         artistRepository = mock(ArtistRepository.class);
         artistService = new ArtistServiceImpl(artistMapper, artistRepository);
         method = mock(Method.class);
+    }
+
+    @AfterEach
+    void tearDown() {
+        clearAllCaches();
     }
 
     @Test
@@ -71,7 +89,7 @@ public class ArtistServiceImplTest {
 
     @Test
     @DisplayName("Create artist with duplicate phone number will fail")
-    void createArtistWithDuplicatePhoneNumberShouldFail() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void createArtistWithDuplicatePhoneNumberShouldFail() throws  InvocationTargetException, IllegalAccessException {
 
         UUID artistId = UUID.randomUUID();
         ArtistDTO artistDto = mock(ArtistDTO.class);
