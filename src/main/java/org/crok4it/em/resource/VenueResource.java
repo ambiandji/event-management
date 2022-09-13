@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 import static org.crok4it.em.constant.CommonConstant.API_BASE_ROUTE;
@@ -47,6 +48,17 @@ public class VenueResource implements VenueApi {
                         .message("Venue fetch successfully")
                         .success(true)
                         .result(Collections.singletonList(venueDTO))
+        );
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponse> findVenueByName(String name) {
+        List<VenueDTO> venueDTOS = venueService.findByName(name);
+        return ResponseEntity.status(OK).body(
+                new SuccessResponse()
+                        .success(true)
+                        .message("Venues fetch successfully")
+                        .result(Collections.singletonList(venueDTOS))
         );
     }
 }

@@ -15,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service("venueService")
@@ -39,6 +41,14 @@ public class VenueServiceImpl implements VenueService {
                 .map(venueMapper::toDto)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         String.format("Venue with id %s not found", id), ErrorCode.VENUE_NOT_FOUND));
+    }
+
+    @Override
+    public List<VenueDTO> findByName(String name) {
+        return venueRepository.findByNameContainsIgnoreCase(name)
+                .stream()
+                .map(venueMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     public Venue findByPhone(String phone) {

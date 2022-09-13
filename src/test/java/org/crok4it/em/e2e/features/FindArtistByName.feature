@@ -1,4 +1,4 @@
-Feature: Find artist by id
+Feature: Find artist by name
 
   Scenario: Find Artist with an existing name
     Given I am logged in with the scopes 'artist:read'

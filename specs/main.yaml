@@ -332,6 +332,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponses'
+  /venue/name/{name}:
+    get:
+      tags:
+        - Venue
+      summary: Find venue by name
+      description: Find venue by name from database
+      operationId: findVenueByName
+      security:
+        - oAuth:
+            - venue:read
+      parameters:
+        - name: name
+          in: path
+          description: Venue name to be fetch
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
 
 
 components:

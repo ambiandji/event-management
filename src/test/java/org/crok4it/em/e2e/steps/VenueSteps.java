@@ -149,6 +149,38 @@ public class VenueSteps implements En {
                     assertThat(HttpStatus.valueOf(result.getResponse().getStatus()).name()).isEqualTo(httpStatus);
 
         });
+        When("I fetch venue with name {string}",
+                (String venueName) -> {
+
+                    MvcResult result = mvc.perform(get(API_VENUE_BASE_ROUTE + "/name/" + venueName)
+                                    .accept(APPLICATION_JSON))
+                            .andDo(print())
+                            .andExpect(status().isOk())
+                            .andReturn();
+
+                    venueDTOS = parseJsonToList(result);
+
+                    assertThat(venueDTOS)
+                            .hasSizeGreaterThan(0)
+                            .isInstanceOf(ArrayList.class);
+
+        });
+        Then("The attempt to fetch an venue with the name {string} will return empty list",
+                (String venueName) -> {
+
+                    MvcResult result = mvc.perform(get(API_VENUE_BASE_ROUTE + "/name/" + venueName)
+                                    .accept(APPLICATION_JSON))
+                            .andDo(print())
+                            .andExpect(status().isOk())
+                            .andReturn();
+
+                    venueDTOS = parseJsonToList(result);
+
+                    assertThat(venueDTOS)
+                            .hasSize(0)
+                            .isInstanceOf(ArrayList.class);
+
+        });
 
     }
 

@@ -20,6 +20,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -143,7 +144,7 @@ public class VenueServiceImplTest extends BaseServiceTest{
 
     }
 
-    /*@Test
+    @Test
     @DisplayName("Fetch venue by name from database")
     void findVenueByExistingNameShouldSuccess() {
         String name = "name";
@@ -161,7 +162,7 @@ public class VenueServiceImplTest extends BaseServiceTest{
 
     }
 
-    @Test
+    /*@Test
     @DisplayName("Fetch all venue from database")
     void findArtisAllExistingShouldSuccess() {
 

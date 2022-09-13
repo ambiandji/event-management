@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.crok4it.em.constant.VenueConstant.API_VENUE_BASE_ROUTE;
@@ -134,13 +135,13 @@ public class VenueResourceTest extends BaseResourceTest{
                 .andExpect(status().isNotFound());
     }
 
-    /*@Test
+    @Test
     @DisplayName("Fetch venue by existing name from database")
     void fetchVenueByExistingNameShouldSuccess() throws Exception {
         String name = "Venue_fetchByName_name";
         String message = "Venues fetch successfully";
 
-        when(artisService.findByName(name)).thenReturn(Collections.singletonList(venueDTO));
+        when(venueService.findByName(name)).thenReturn(Collections.singletonList(venueDTO));
 
         mvc.perform(get(API_VENUE_BASE_ROUTE + "/name/" + name))
                 .andDo(print())
@@ -154,7 +155,7 @@ public class VenueResourceTest extends BaseResourceTest{
                 .andExpect(jsonPath("$.success").value(true));
     }
 
-    @Test
+    /*@Test
     @DisplayName("Fetch all venue from database")
     void fetchVenueAllShouldSuccess() throws Exception {
         String message = "Venues fetch successfully";
