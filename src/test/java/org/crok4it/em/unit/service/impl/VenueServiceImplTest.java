@@ -3,6 +3,7 @@ package org.crok4it.em.unit.service.impl;
 import org.crok4it.em.domain.Venue;
 import org.crok4it.em.dto.VenueDTO;
 import org.crok4it.em.exception.ConflictException;
+import org.crok4it.em.exception.ResourceNotFoundException;
 import org.crok4it.em.repository.VenueRepository;
 import org.crok4it.em.service.VenueService;
 import org.crok4it.em.service.impl.VenueServiceImpl;
@@ -55,12 +56,8 @@ public class VenueServiceImplTest extends BaseServiceTest{
         clearAllCaches();
     }
 
+
     @Test
-    @DisplayName("Create venue with valid data")
-    void createVenueShouldSuccess(){
-        assertThat(true).isTrue();
-    }
-    /*@Test
     @DisplayName("Create venue with valid data")
     void createVenueShouldSuccess() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
@@ -111,9 +108,9 @@ public class VenueServiceImplTest extends BaseServiceTest{
         InOrder inOrder = inOrder(venueRepository);
         inOrder.verify(venueRepository).findByPhone(phone);
 
-    }*/
+    }
 
-    /*@Test
+    @Test
     @DisplayName("Fetch venue by id from database")
     void findVenueByExistingIdShouldSuccess() {
         String venueId = UUID.randomUUID().toString();
@@ -146,7 +143,7 @@ public class VenueServiceImplTest extends BaseServiceTest{
 
     }
 
-    @Test
+    /*@Test
     @DisplayName("Fetch venue by name from database")
     void findVenueByExistingNameShouldSuccess() {
         String name = "name";

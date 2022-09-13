@@ -3,6 +3,7 @@ package org.crok4it.em.unit.resource;
 
 import org.crok4it.em.dto.VenueDTO;
 import org.crok4it.em.exception.ConflictException;
+import org.crok4it.em.exception.ResourceNotFoundException;
 import org.crok4it.em.resource.VenueResource;
 import org.crok4it.em.service.impl.VenueServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +19,10 @@ import java.util.UUID;
 import static org.crok4it.em.constant.VenueConstant.API_VENUE_BASE_ROUTE;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -99,138 +103,138 @@ public class VenueResourceTest extends BaseResourceTest{
             .andExpect(status().isConflict());
     }
 
+    @Test
+    @DisplayName("Fetch venue by existing id from database")
+    void fetchVenueByExistingIdShouldSuccess() throws Exception {
+        UUID venueId = UUID.randomUUID();
+        String message = "Venue fetch successfully";
+
+        when(venueService.findById(venueId.toString())).thenReturn(venueDTO);
+
+        mvc.perform(get(API_VENUE_BASE_ROUTE + "/" + venueId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]").value(venueDTO))
+                .andExpect(jsonPath("$.result[0].name").value(venueDTO.getName()))
+                .andExpect(jsonPath("$.result[0].phone").value(venueDTO.getPhone()))
+                .andExpect(jsonPath("$.message").value(message))
+                .andExpect(jsonPath("$.success").value(true));
+    }
+
+    @Test
+    @DisplayName("Fetch venue with wrong id from database")
+    void fetchVenueWithWrongIdShouldFail() throws Exception {
+        UUID venueId = UUID.randomUUID();
+
+        when(venueService.findById(venueId.toString())).thenThrow(ResourceNotFoundException.class);
+
+        mvc.perform(get(API_VENUE_BASE_ROUTE + "/" + venueId))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
     /*@Test
-    @DisplayName("Fetch artist by existing id from database")
-    void fetchArtistByExistingIdShouldSuccess() throws Exception {
-        UUID artistId = UUID.randomUUID();
-        String message = "Artist fetch successfully";
+    @DisplayName("Fetch venue by existing name from database")
+    void fetchVenueByExistingNameShouldSuccess() throws Exception {
+        String name = "Venue_fetchByName_name";
+        String message = "Venues fetch successfully";
 
-        when(artisService.findById(artistId.toString())).thenReturn(artistDTO);
+        when(artisService.findByName(name)).thenReturn(Collections.singletonList(venueDTO));
 
-        mvc.perform(get(API_ARTIST_BASE_ROUTE + "/" + artistId))
+        mvc.perform(get(API_VENUE_BASE_ROUTE + "/name/" + name))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result").isArray())
-                .andExpect(jsonPath("$.result[0]").value(artistDTO))
-                .andExpect(jsonPath("$.result[0].name").value(artistDTO.getName()))
-                .andExpect(jsonPath("$.result[0].phone").value(artistDTO.getPhone()))
+                .andExpect(jsonPath("$.result[0]").isArray())
+                .andExpect(jsonPath("$.result[0]").isArray())
+                .andExpect(jsonPath("$.result[0][0].name").value(venueDTO.getName()))
+                .andExpect(jsonPath("$.result[0][0].phone").value(venueDTO.getPhone()))
                 .andExpect(jsonPath("$.message").value(message))
                 .andExpect(jsonPath("$.success").value(true));
     }
 
     @Test
-    @DisplayName("Fetch artist with wrong id from database")
-    void fetchArtistWithWrongIdShouldFail() throws Exception {
-        UUID artistId = UUID.randomUUID();
+    @DisplayName("Fetch all venue from database")
+    void fetchVenueAllShouldSuccess() throws Exception {
+        String message = "Venues fetch successfully";
 
-        when(artisService.findById(artistId.toString())).thenThrow(ResourceNotFoundException.class);
+        when(artisService.findAll()).thenReturn(Collections.singletonList(venueDTO));
 
-        mvc.perform(get(API_ARTIST_BASE_ROUTE + "/" + artistId))
+        mvc.perform(get(API_VENUE_BASE_ROUTE))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.result[0]").isArray())
+                .andExpect(jsonPath("$.result[0]").isArray())
+                .andExpect(jsonPath("$.result[0][0].name").value(venueDTO.getName()))
+                .andExpect(jsonPath("$.result[0][0].phone").value(venueDTO.getPhone()))
+                .andExpect(jsonPath("$.message").value(message))
+                .andExpect(jsonPath("$.success").value(true));
+    }
+
+    @Test
+    @DisplayName("Delete venue by existing id from database")
+    void deleteVenueByExistingIdShouldSuccess() throws Exception {
+        UUID venueId = UUID.randomUUID();
+        String message = "Venue deleted successfully";
+
+        doNothing().when(artisService).deleteById(venueId.toString());
+
+        mvc.perform(delete(API_VENUE_BASE_ROUTE + "/" + venueId))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result").isArray())
+                .andExpect(jsonPath("$.message").value(message))
+                .andExpect(jsonPath("$.success").value(true));
+    }
+
+    @Test
+    @DisplayName("Delete venue with wrong id from database")
+    void deleteVenueWithWrongIdShouldFail() throws Exception {
+        UUID venueId = UUID.randomUUID();
+
+        doThrow(ResourceNotFoundException.class).when(artisService).deleteById(venueId.toString());
+
+
+        mvc.perform(delete(API_VENUE_BASE_ROUTE + "/" + venueId))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    @DisplayName("Fetch artist by existing name from database")
-    void fetchArtistByExistingNameShouldSuccess() throws Exception {
-        String name = "Artist_fetchByName_name";
-        String message = "Artists fetch successfully";
+    @DisplayName("Update venue by existing id from database")
+    void updateVenueByExistingIdShouldSuccess() throws Exception {
+        UUID venueId = UUID.randomUUID();
+        String message = "Venue updated successfully";
 
-        when(artisService.findByName(name)).thenReturn(Collections.singletonList(artistDTO));
+        when(artisService.update(venueId.toString(), venueDTO)).thenReturn(venueDTO);
 
-        mvc.perform(get(API_ARTIST_BASE_ROUTE + "/name/" + name))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result").isArray())
-                .andExpect(jsonPath("$.result[0]").isArray())
-                .andExpect(jsonPath("$.result[0]").isArray())
-                .andExpect(jsonPath("$.result[0][0].name").value(artistDTO.getName()))
-                .andExpect(jsonPath("$.result[0][0].phone").value(artistDTO.getPhone()))
-                .andExpect(jsonPath("$.message").value(message))
-                .andExpect(jsonPath("$.success").value(true));
-    }
-
-    @Test
-    @DisplayName("Fetch all artist from database")
-    void fetchArtistAllShouldSuccess() throws Exception {
-        String message = "Artists fetch successfully";
-
-        when(artisService.findAll()).thenReturn(Collections.singletonList(artistDTO));
-
-        mvc.perform(get(API_ARTIST_BASE_ROUTE))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result").isArray())
-                .andExpect(jsonPath("$.result[0]").isArray())
-                .andExpect(jsonPath("$.result[0]").isArray())
-                .andExpect(jsonPath("$.result[0][0].name").value(artistDTO.getName()))
-                .andExpect(jsonPath("$.result[0][0].phone").value(artistDTO.getPhone()))
-                .andExpect(jsonPath("$.message").value(message))
-                .andExpect(jsonPath("$.success").value(true));
-    }
-
-    @Test
-    @DisplayName("Delete artist by existing id from database")
-    void deleteArtistByExistingIdShouldSuccess() throws Exception {
-        UUID artistId = UUID.randomUUID();
-        String message = "Artist deleted successfully";
-
-        doNothing().when(artisService).deleteById(artistId.toString());
-
-        mvc.perform(delete(API_ARTIST_BASE_ROUTE + "/" + artistId))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result").isArray())
-                .andExpect(jsonPath("$.message").value(message))
-                .andExpect(jsonPath("$.success").value(true));
-    }
-
-    @Test
-    @DisplayName("Delete artist with wrong id from database")
-    void deleteArtistWithWrongIdShouldFail() throws Exception {
-        UUID artistId = UUID.randomUUID();
-
-        doThrow(ResourceNotFoundException.class).when(artisService).deleteById(artistId.toString());
-
-
-        mvc.perform(delete(API_ARTIST_BASE_ROUTE + "/" + artistId))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @DisplayName("Update artist by existing id from database")
-    void updateArtistByExistingIdShouldSuccess() throws Exception {
-        UUID artistId = UUID.randomUUID();
-        String message = "Artist updated successfully";
-
-        when(artisService.update(artistId.toString(), artistDTO)).thenReturn(artistDTO);
-
-        mvc.perform(put(API_ARTIST_BASE_ROUTE + "/" + artistId)
+        mvc.perform(put(API_VENUE_BASE_ROUTE + "/" + venueId)
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(BaseResourceTest.asJsonString(artistDTO)))
+                        .content(BaseResourceTest.asJsonString(venueDTO)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result").isArray())
-                .andExpect(jsonPath("$.result[0]").value(artistDTO))
-                .andExpect(jsonPath("$.result[0].name").value(artistDTO.getName()))
-                .andExpect(jsonPath("$.result[0].phone").value(artistDTO.getPhone()))
+                .andExpect(jsonPath("$.result[0]").value(venueDTO))
+                .andExpect(jsonPath("$.result[0].name").value(venueDTO.getName()))
+                .andExpect(jsonPath("$.result[0].phone").value(venueDTO.getPhone()))
                 .andExpect(jsonPath("$.message").value(message))
                 .andExpect(jsonPath("$.success").value(true));
     }
 
     @Test
-    @DisplayName("Update artist by existing id from database")
-    void updateArtistByWrongIdShouldFail() throws Exception {
-        UUID artistId = UUID.randomUUID();
+    @DisplayName("Update venue by existing id from database")
+    void updateVenueByWrongIdShouldFail() throws Exception {
+        UUID venueId = UUID.randomUUID();
 
-        when(artisService.update(artistId.toString(), artistDTO)).thenThrow(ResourceNotFoundException.class);
+        when(artisService.update(venueId.toString(), venueDTO)).thenThrow(ResourceNotFoundException.class);
 
-        mvc.perform(put(API_ARTIST_BASE_ROUTE + "/" + artistId)
+        mvc.perform(put(API_VENUE_BASE_ROUTE + "/" + venueId)
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON)
-                        .content(BaseResourceTest.asJsonString(artistDTO)))
+                        .content(BaseResourceTest.asJsonString(venueDTO)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }*/

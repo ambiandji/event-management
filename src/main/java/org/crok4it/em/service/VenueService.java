@@ -6,4 +6,6 @@ import java.util.UUID;
 
 public interface VenueService {
     UUID createVenue(VenueDTO venueDTO) throws NoSuchMethodException;
+
+    VenueDTO findById(String toString);
 }

@@ -6,6 +6,7 @@ import org.crok4it.em.domain.Venue;
 import org.crok4it.em.dto.VenueDTO;
 import org.crok4it.em.exception.ConflictException;
 import org.crok4it.em.exception.ErrorCode;
+import org.crok4it.em.exception.ResourceNotFoundException;
 import org.crok4it.em.repository.VenueRepository;
 import org.crok4it.em.service.VenueService;
 import org.crok4it.em.service.mapper.VenueMapper;
@@ -30,6 +31,14 @@ public class VenueServiceImpl implements VenueService {
         Venue venue = venueMapper.toEntity(venueDTO);
         venue = venueRepository.saveAndFlush(venue);
         return UUID.fromString(venue.getId());
+    }
+
+    @Override
+    public VenueDTO findById(String id) {
+        return venueRepository.findById(id)
+                .map(venueMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        String.format("Venue with id %s not found", id), ErrorCode.VENUE_NOT_FOUND));
     }
 
     public Venue findByPhone(String phone) {
@@ -67,7 +76,7 @@ public class VenueServiceImpl implements VenueService {
         if(checkIfFieldIsUnique(id, "findByWebsiteLink", value)) {
             log.error("Website link {} already used. Please change", value);
             throw new ConflictException(
-                    String.format("Website link %s already used. Please change", value), ErrorCode.ARTIST_CONFLICT);
+                    String.format("Website link %s already used. Please change", value), ErrorCode.VENUE_CONFLICT);
         }
     }
 
@@ -75,7 +84,7 @@ public class VenueServiceImpl implements VenueService {
         if(checkIfFieldIsUnique(id, "findByImageLink", value)) {
             log.error("Image link {} already used. Please change", value);
             throw new ConflictException(
-                    String.format("Image link %s already used. Please change", value), ErrorCode.ARTIST_CONFLICT);
+                    String.format("Image link %s already used. Please change", value), ErrorCode.VENUE_CONFLICT);
         }
     }
 
@@ -83,7 +92,7 @@ public class VenueServiceImpl implements VenueService {
         if(checkIfFieldIsUnique(id, "findByFacebookLink", value)) {
             log.error("Facebook link {} already used. Please change", value);
             throw new ConflictException(
-                    String.format("Facebook link %s already used. Please change", value), ErrorCode.ARTIST_CONFLICT);
+                    String.format("Facebook link %s already used. Please change", value), ErrorCode.VENUE_CONFLICT);
         }
 
     }
@@ -92,7 +101,7 @@ public class VenueServiceImpl implements VenueService {
         if(checkIfFieldIsUnique(id, "findByPhone", value)) {
             log.error("Phone number {} already used. Please change", value);
             throw new ConflictException(
-                    String.format("Phone number %s already used. Please change", value), ErrorCode.ARTIST_CONFLICT);
+                    String.format("Phone number %s already used. Please change", value), ErrorCode.VENUE_CONFLICT);
         }
     }
 

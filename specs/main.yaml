@@ -289,6 +289,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponses'
+  /venue/{id}:
+    get:
+      tags:
+        - Venue
+      summary: Find venue by id
+      description: Find Venue by id from database
+      operationId: findVenueById
+      security:
+        - oAuth:
+            - venue:read
+      parameters:
+        - name: id
+          in: path
+          description: Venue id to be fetch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+
 
 components:
   securitySchemes:

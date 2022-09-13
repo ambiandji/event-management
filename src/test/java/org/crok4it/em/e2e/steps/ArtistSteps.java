@@ -120,7 +120,6 @@ public class ArtistSteps implements En{
                             .andExpect(status().isOk())
                             .andReturn();
 
-                    Gson gson = new Gson();
                     artistDTO = parseJsonToObject(result);
 
                     assertThat(artistDTO)

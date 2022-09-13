@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import static org.crok4it.em.constant.CommonConstant.API_BASE_ROUTE;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,6 +36,17 @@ public class VenueResource implements VenueApi {
                        .success(true)
                        .message("Venue created successfully")
                        .result(Collections.singletonList(venueId))
+        );
+    }
+
+    @Override
+    public ResponseEntity<SuccessResponse> findVenueById(UUID id) {
+        VenueDTO venueDTO = venueService.findById(id.toString());
+        return ResponseEntity.status(OK).body(
+                new SuccessResponse()
+                        .message("Venue fetch successfully")
+                        .success(true)
+                        .result(Collections.singletonList(venueDTO))
         );
     }
 }
