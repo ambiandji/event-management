@@ -318,6 +318,8 @@ components:
           format: date-time
         path:
           type: string
+        errorCode:
+          type: string
         errors:
           type: array
           items:
