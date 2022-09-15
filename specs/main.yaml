@@ -9,7 +9,7 @@ paths:
   /artist:
     post:
       tags:
-        - Artist
+        - artist
       summary: Create a new artist
       description: Create a new artist in database
       operationId: createArtist
@@ -56,7 +56,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponses'
     get:
       tags:
-        - Artist
+        - artist
       summary: Fetch all artist
       description: Fetch all artist from database
       operationId: findArtistAll
@@ -70,46 +70,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
-  /artist/name/{name}:
-    get:
-      tags:
-        - Artist
-      summary: Find Artist by name
-      description: Find artist by name from database
-      operationId: findArtistByName
-      security:
-        - oAuth:
-            - artist:read
-      parameters:
-        - name: name
-          in: path
-          description: Artist name to be fetch
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponses'
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponses'
   /artist/{id}:
     get:
       tags:
-        - Artist
+        - artist
       summary: Find artist by id
       description: Find Artist by id from database
       operationId: findArtistById
@@ -151,7 +115,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponses'
     put:
       tags:
-        - Artist
+        - artist
       summary: Update artist buy id
       description: Update artist buy id
       operationId: UpdateArtistById
@@ -198,10 +162,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponses'
-
     delete:
       tags:
-        - Artist
+        - artist
       summary: Delete artist by id
       description: Delete artist by id from database
       operationId: deleteArtistById
@@ -241,10 +204,46 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponses'
+  /artist/name/{name}:
+    get:
+      tags:
+        - artist
+      summary: Find Artist by name
+      description: Find artist by name from database
+      operationId: findArtistByName
+      security:
+        - oAuth:
+            - artist:read
+      parameters:
+        - name: name
+          in: path
+          description: Artist name to be fetch
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
   /venue:
     post:
       tags:
-        - Venue
+        - venue
       summary: Create a new venue
       description: Create a new venue in database
       operationId: createVenue
@@ -291,7 +290,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponses'
     get:
       tags:
-        - Venue
+        - venue
       summary: Fetch all venue
       description: Fetch all venue from database
       operationId: findVenueAll
@@ -308,7 +307,7 @@ paths:
   /venue/{id}:
     get:
       tags:
-        - Venue
+        - venue
       summary: Find venue by id
       description: Find Venue by id from database
       operationId: findVenueById
@@ -350,7 +349,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponses'
     put:
       tags:
-        - Venue
+        - venue
       summary: Update venue buy id
       description: Update venue buy id
       operationId: UpdateVenueById
@@ -399,7 +398,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponses'
     delete:
       tags:
-        - Venue
+        - venue
       summary: Delete venue by id
       description: Delete venue by id from database
       operationId: deleteVenueById
@@ -442,7 +441,7 @@ paths:
   /venue/name/{name}:
     get:
       tags:
-        - Venue
+        - venue
       summary: Find venue by name
       description: Find venue by name from database
       operationId: findVenueByName
