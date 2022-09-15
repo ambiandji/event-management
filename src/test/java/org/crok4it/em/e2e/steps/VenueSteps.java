@@ -181,6 +181,21 @@ public class VenueSteps implements En {
                             .isInstanceOf(ArrayList.class);
 
         });
+        Then("The attempt to fetch all venue from database will return a list of venue",
+                () -> {
+
+                    MvcResult result = mvc.perform(get(API_VENUE_BASE_ROUTE)
+                                    .accept(APPLICATION_JSON))
+                            .andDo(print())
+                            .andExpect(status().isOk())
+                            .andReturn();
+
+                    venueDTOS = parseJsonToList(result);
+
+                    assertThat(venueDTOS)
+                            .hasSizeGreaterThan(0)
+                            .isInstanceOf(ArrayList.class);
+        });
 
     }
 

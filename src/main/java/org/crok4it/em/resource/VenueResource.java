@@ -41,6 +41,17 @@ public class VenueResource implements VenueApi {
     }
 
     @Override
+    public ResponseEntity<SuccessResponse> findVenueAll() {
+        List<VenueDTO> venueDTOS = venueService.findAll();
+        return ResponseEntity.status(OK).body(
+                new SuccessResponse()
+                        .message("Venues fetch successfully")
+                        .success(true)
+                        .result(Collections.singletonList(venueDTOS))
+        );
+    }
+
+    @Override
     public ResponseEntity<SuccessResponse> findVenueById(UUID id) {
         VenueDTO venueDTO = venueService.findById(id.toString());
         return ResponseEntity.status(OK).body(

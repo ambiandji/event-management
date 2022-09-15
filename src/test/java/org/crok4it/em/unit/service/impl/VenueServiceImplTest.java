@@ -162,9 +162,9 @@ public class VenueServiceImplTest extends BaseServiceTest{
 
     }
 
-    /*@Test
+    @Test
     @DisplayName("Fetch all venue from database")
-    void findArtisAllExistingShouldSuccess() {
+    void findVenueAllExistingShouldSuccess() {
 
         Venue venue = mock(Venue.class);
         VenueDTO venueDTO = mock(VenueDTO.class);
@@ -180,7 +180,7 @@ public class VenueServiceImplTest extends BaseServiceTest{
 
     }
 
-    @Test
+    /*@Test
     @DisplayName("Delete venue by id from database")
     void deleteVenueByExistingIdShouldSuccess() {
         String venueId = UUID.randomUUID().toString();

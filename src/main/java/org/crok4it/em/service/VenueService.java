@@ -11,4 +11,6 @@ public interface VenueService {
     VenueDTO findById(String toString);
 
     List<VenueDTO> findByName(String name);
+
+    List<VenueDTO> findAll();
 }

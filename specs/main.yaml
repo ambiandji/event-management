@@ -289,6 +289,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponses'
+    get:
+      tags:
+        - Venue
+      summary: Fetch all venue
+      description: Fetch all venue from database
+      operationId: findVenueAll
+      security:
+        - oAuth:
+            - venue:read
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
   /venue/{id}:
     get:
       tags:

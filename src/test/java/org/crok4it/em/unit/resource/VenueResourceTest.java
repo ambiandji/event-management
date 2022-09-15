@@ -155,12 +155,12 @@ public class VenueResourceTest extends BaseResourceTest{
                 .andExpect(jsonPath("$.success").value(true));
     }
 
-    /*@Test
+    @Test
     @DisplayName("Fetch all venue from database")
     void fetchVenueAllShouldSuccess() throws Exception {
         String message = "Venues fetch successfully";
 
-        when(artisService.findAll()).thenReturn(Collections.singletonList(venueDTO));
+        when(venueService.findAll()).thenReturn(Collections.singletonList(venueDTO));
 
         mvc.perform(get(API_VENUE_BASE_ROUTE))
                 .andDo(print())
@@ -174,7 +174,7 @@ public class VenueResourceTest extends BaseResourceTest{
                 .andExpect(jsonPath("$.success").value(true));
     }
 
-    @Test
+    /*@Test
     @DisplayName("Delete venue by existing id from database")
     void deleteVenueByExistingIdShouldSuccess() throws Exception {
         UUID venueId = UUID.randomUUID();

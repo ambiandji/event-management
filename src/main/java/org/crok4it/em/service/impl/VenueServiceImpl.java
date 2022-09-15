@@ -51,6 +51,14 @@ public class VenueServiceImpl implements VenueService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<VenueDTO> findAll() {
+        return venueRepository.findAll()
+                .stream()
+                .map(venueMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     public Venue findByPhone(String phone) {
         return venueRepository.findByPhone(phone).orElse(null);
     }

@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ArtistResourceTest extends BaseResourceTest{
 
     @MockBean
-    private ArtistServiceImpl artisService;
+    private ArtistServiceImpl artistService;
 
     @Autowired
     MockMvc mvc;
@@ -61,7 +61,7 @@ public class ArtistResourceTest extends BaseResourceTest{
         UUID artistId = UUID.randomUUID();
         String message = "Artist created successfully";
 
-        when(artisService.createArtist(artistDTO)).thenReturn(artistId);
+        when(artistService.createArtist(artistDTO)).thenReturn(artistId);
 
         mvc.perform(post(API_ARTIST_BASE_ROUTE)
                 .accept(APPLICATION_JSON)
@@ -96,7 +96,7 @@ public class ArtistResourceTest extends BaseResourceTest{
     @DisplayName("Create artist with facebook link already store in database")
     void createArtistWithDuplicateFacebookLinkShouldFail() throws Exception {
 
-        when(artisService.createArtist(artistDTO)).thenThrow(ConflictException.class);
+        when(artistService.createArtist(artistDTO)).thenThrow(ConflictException.class);
 
         mvc.perform(post(API_ARTIST_BASE_ROUTE)
                 .accept(APPLICATION_JSON)
@@ -112,7 +112,7 @@ public class ArtistResourceTest extends BaseResourceTest{
         UUID artistId = UUID.randomUUID();
         String message = "Artist fetch successfully";
 
-        when(artisService.findById(artistId.toString())).thenReturn(artistDTO);
+        when(artistService.findById(artistId.toString())).thenReturn(artistDTO);
 
         mvc.perform(get(API_ARTIST_BASE_ROUTE + "/" + artistId))
                 .andDo(print())
@@ -130,7 +130,7 @@ public class ArtistResourceTest extends BaseResourceTest{
     void fetchArtistWithWrongIdShouldFail() throws Exception {
         UUID artistId = UUID.randomUUID();
 
-        when(artisService.findById(artistId.toString())).thenThrow(ResourceNotFoundException.class);
+        when(artistService.findById(artistId.toString())).thenThrow(ResourceNotFoundException.class);
 
         mvc.perform(get(API_ARTIST_BASE_ROUTE + "/" + artistId))
                 .andDo(print())
@@ -143,7 +143,7 @@ public class ArtistResourceTest extends BaseResourceTest{
         String name = "Artist_fetchByName_name";
         String message = "Artists fetch successfully";
 
-        when(artisService.findByName(name)).thenReturn(Collections.singletonList(artistDTO));
+        when(artistService.findByName(name)).thenReturn(Collections.singletonList(artistDTO));
 
         mvc.perform(get(API_ARTIST_BASE_ROUTE + "/name/" + name))
                 .andDo(print())
@@ -162,7 +162,7 @@ public class ArtistResourceTest extends BaseResourceTest{
     void fetchArtistAllShouldSuccess() throws Exception {
         String message = "Artists fetch successfully";
 
-        when(artisService.findAll()).thenReturn(Collections.singletonList(artistDTO));
+        when(artistService.findAll()).thenReturn(Collections.singletonList(artistDTO));
 
         mvc.perform(get(API_ARTIST_BASE_ROUTE))
                 .andDo(print())
@@ -182,7 +182,7 @@ public class ArtistResourceTest extends BaseResourceTest{
         UUID artistId = UUID.randomUUID();
         String message = "Artist deleted successfully";
 
-        doNothing().when(artisService).deleteById(artistId.toString());
+        doNothing().when(artistService).deleteById(artistId.toString());
 
         mvc.perform(delete(API_ARTIST_BASE_ROUTE + "/" + artistId))
                 .andDo(print())
@@ -197,7 +197,7 @@ public class ArtistResourceTest extends BaseResourceTest{
     void deleteArtistWithWrongIdShouldFail() throws Exception {
         UUID artistId = UUID.randomUUID();
 
-        doThrow(ResourceNotFoundException.class).when(artisService).deleteById(artistId.toString());
+        doThrow(ResourceNotFoundException.class).when(artistService).deleteById(artistId.toString());
 
 
         mvc.perform(delete(API_ARTIST_BASE_ROUTE + "/" + artistId))
@@ -211,7 +211,7 @@ public class ArtistResourceTest extends BaseResourceTest{
         UUID artistId = UUID.randomUUID();
         String message = "Artist updated successfully";
 
-        when(artisService.update(artistId.toString(), artistDTO)).thenReturn(artistDTO);
+        when(artistService.update(artistId.toString(), artistDTO)).thenReturn(artistDTO);
 
         mvc.perform(put(API_ARTIST_BASE_ROUTE + "/" + artistId)
                         .contentType(APPLICATION_JSON)
@@ -232,7 +232,7 @@ public class ArtistResourceTest extends BaseResourceTest{
     void updateArtistByWrongIdShouldFail() throws Exception {
         UUID artistId = UUID.randomUUID();
 
-        when(artisService.update(artistId.toString(), artistDTO)).thenThrow(ResourceNotFoundException.class);
+        when(artistService.update(artistId.toString(), artistDTO)).thenThrow(ResourceNotFoundException.class);
 
         mvc.perform(put(API_ARTIST_BASE_ROUTE + "/" + artistId)
                         .contentType(APPLICATION_JSON)
