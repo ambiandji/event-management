@@ -8,11 +8,13 @@ import java.util.UUID;
 public interface VenueService {
     UUID createVenue(VenueDTO venueDTO) throws NoSuchMethodException;
 
-    VenueDTO findById(String toString);
+    VenueDTO findById(String id);
 
     List<VenueDTO> findByName(String name);
 
     List<VenueDTO> findAll();
 
-    void deleteById(String toString);
+    void deleteById(String id);
+
+    VenueDTO update(String toString, VenueDTO venueDTO) throws NoSuchMethodException;
 }

@@ -68,6 +68,16 @@ public class VenueServiceImpl implements VenueService {
         venueRepository.deleteById(id);
     }
 
+    @Override
+    public VenueDTO update(String id, VenueDTO venueDTO) throws NoSuchMethodException {
+        Venue venue = venueRepository.findById(id).orElseThrow(() -> {
+            log.error("Venue with id {} not found", id);
+            throw new ResourceNotFoundException(String.format("Venue with id %s not found", id), ErrorCode.VENUE_NOT_FOUND);
+        });
+        validateVenueDTO(id, venueDTO);
+        return venueMapper.toDto(venueRepository.saveAndFlush(venueMapper.fromDTOForUpdate(venue, venueDTO)));
+    }
+
     public Venue findByPhone(String phone) {
         return venueRepository.findByPhone(phone).orElse(null);
     }

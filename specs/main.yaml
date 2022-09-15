@@ -348,6 +348,55 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponses'
+    put:
+      tags:
+        - Venue
+      summary: Update venue buy id
+      description: Update venue buy id
+      operationId: UpdateVenueById
+      security:
+        - oAuth:
+            - venue:update
+      parameters:
+        - name: id
+          in: path
+          description: Venue id to be updated
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Venue DTO that we need to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VenueDTO'
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
     delete:
       tags:
         - Venue

@@ -73,16 +73,12 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public ArtistDTO update(String id, ArtistDTO artistDTO) throws NoSuchMethodException {
-        Optional<Artist> optionalArtist = artistRepository.findById(id);
-        if (optionalArtist.isPresent()) {
-            validateArtistDTO(id, artistDTO);
-            Artist artist = artistRepository.saveAndFlush(artistMapper.fromDTOForUpdate(optionalArtist.get(), artistDTO));
-            return artistMapper.toDto(artist);
-        } else {
+        Artist artist = artistRepository.findById(id).orElseThrow(() -> {
             log.error("Artist with id {} not found", id);
             throw new ResourceNotFoundException(
                     String.format("Artist with id %s not found", id), ErrorCode.ARTIST_NOT_FOUND);
-        }
+        });
+       return artistMapper.toDto(artistRepository.saveAndFlush(artistMapper.fromDTOForUpdate(artist, artistDTO)));
 
     }
 

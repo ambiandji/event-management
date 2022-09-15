@@ -8,6 +8,7 @@ import io.cucumber.java8.En;
 import org.crok4it.em.domain.Venue;
 import org.crok4it.em.dto.ArtistDTO;
 import org.crok4it.em.dto.VenueDTO;
+import org.crok4it.em.e2e.mapper.ArtistDTORowMapper;
 import org.crok4it.em.e2e.mapper.VenueDTORowMapper;
 import org.crok4it.em.unit.resource.BaseResourceTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -54,7 +56,7 @@ public class VenueSteps implements En {
         When("I create a new venue with the following data",
                 (DataTable dataTable) -> {
 
-                    VenueDTO venueDataTable = getArtistFromFeature(dataTable);
+                    VenueDTO venueDataTable = getVenueFromFeature(dataTable);
 
                     MvcResult result = mvc.perform(post(API_VENUE_BASE_ROUTE)
                                     .accept(APPLICATION_JSON)
@@ -89,7 +91,7 @@ public class VenueSteps implements En {
         });
         Then("I should see that attempt to create a new venue with the following data will fail with status error {string} and error code {string}",
                 (String httpStatus, String  errorCode, DataTable dataTable) -> {
-                    VenueDTO venueDataTable = getArtistFromFeature(dataTable);
+                    VenueDTO venueDataTable = getVenueFromFeature(dataTable);
 
                     MvcResult result = mvc.perform(post(API_VENUE_BASE_ROUTE)
                                     .accept(APPLICATION_JSON)
@@ -129,7 +131,7 @@ public class VenueSteps implements En {
 
         });
         Then("I should the following venue is returned from database", (DataTable dataTable) -> {
-            VenueDTO venueDataTable = getArtistFromFeature(dataTable);
+            VenueDTO venueDataTable = getVenueFromFeature(dataTable);
 
             assertThat(venueDTO)
                     .isNotNull()
@@ -232,6 +234,73 @@ public class VenueSteps implements En {
                     assertThat(HttpStatus.valueOf(result.getResponse().getStatus()).name()).isEqualTo(httpStatus);
 
         });
+        And("The following venue is store in database",
+                (DataTable dataTable) -> {
+
+                String id = dataTable.asMaps().get(0).get("id");
+
+                Map<String, String> artistAsMap = dataTable.asMaps().get(0);
+
+                VenueDTO dbVenueDTO = jdbcTemplate.queryForObject(
+                        String.format("SELECT * FROM t_venue WHERE c_id = '%s'", id),
+                        new VenueDTORowMapper()
+                );
+
+                assertThat(dbVenueDTO)
+                        .isNotNull()
+                        .returns(UUID.fromString(artistAsMap.get("id")), VenueDTO::getId)
+                        .returns(artistAsMap.get("name"), VenueDTO::getName)
+                        .returns(artistAsMap.get("phone"), VenueDTO::getPhone)
+                        .returns(artistAsMap.get("city"), VenueDTO::getCity);
+
+        });
+        When("I update venue with id {string} with the following data",
+                (String id, DataTable dataTable) -> {
+                    VenueDTO venueDataTable = getVenueFromFeature(dataTable);
+
+                    MvcResult result = mvc.perform(put(API_VENUE_BASE_ROUTE + "/" + id)
+                                    .accept(APPLICATION_JSON)
+                                    .contentType(APPLICATION_JSON)
+                                    .content(BaseResourceTest.asJsonString(venueDataTable))
+                            )
+                            .andDo(print())
+                            .andExpect(status().isOk())
+                            .andReturn();
+                    venueDTO = parseJsonToObject(result);
+
+                    assertThat(venueDTO)
+                            .isNotNull()
+                            .isInstanceOf(VenueDTO.class);
+
+        });
+        Then("I should the following venue is saved to database",
+                (DataTable dataTable) -> {
+                    Map<String, String> venueAsMap = dataTable.asMaps().get(0);
+
+                    assertThat(venueDTO)
+                            .isNotNull()
+                            .returns(UUID.fromString(venueAsMap.get("id")), VenueDTO::getId)
+                            .returns(venueAsMap.get("name"), VenueDTO::getName)
+                            .returns(venueAsMap.get("phone"), VenueDTO::getPhone)
+                            .returns(venueAsMap.get("city"), VenueDTO::getCity);
+
+        });
+        Then("The attempt to update an venue with the id {string} and following data will fail with status error {string} and error code {string}",
+                (String id, String httpStatus, String errorCode, DataTable dataTable) -> {
+                    VenueDTO venueDataTable = getVenueFromFeature(dataTable);
+
+                    MvcResult result = mvc.perform(put(API_VENUE_BASE_ROUTE + "/" + id)
+                                    .accept(APPLICATION_JSON)
+                                    .contentType(APPLICATION_JSON)
+                                    .content(BaseResourceTest.asJsonString(venueDataTable))
+                            )
+                            .andDo(print())
+                            .andExpect(status().isNotFound())
+                            .andReturn();
+                    assertThat(result.getResponse().getStatus()).isEqualTo(Integer.valueOf(errorCode));
+                    assertThat(HttpStatus.valueOf(result.getResponse().getStatus()).name()).isEqualTo(httpStatus);
+
+        });
 
     }
 
@@ -260,7 +329,7 @@ public class VenueSteps implements En {
         return true;
     }
 
-    private VenueDTO getArtistFromFeature(DataTable dataTable) {
+    private VenueDTO getVenueFromFeature(DataTable dataTable) {
         if (dataTable.asMaps().get(0).get("id") != null) {
             return venueDTO = new VenueDTO()
                     .id(UUID.fromString(dataTable.asMaps().get(0).get("id")))

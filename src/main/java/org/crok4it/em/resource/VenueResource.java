@@ -83,4 +83,19 @@ public class VenueResource implements VenueApi {
                         .result(Collections.singletonList(venueDTOS))
         );
     }
+
+    @Override
+    public ResponseEntity<SuccessResponse> updateVenueById(UUID id, VenueDTO venueDTO) {
+        try {
+            venueDTO = venueService.update(id.toString(), venueDTO);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.status(OK).body(
+                new SuccessResponse()
+                        .message("Venue updated successfully")
+                        .success(true)
+                        .result(Collections.singletonList(venueDTO))
+        );
+    }
 }

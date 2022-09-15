@@ -205,13 +205,13 @@ public class VenueResourceTest extends BaseResourceTest{
                 .andExpect(status().isNotFound());
     }
 
-    /*@Test
+    @Test
     @DisplayName("Update venue by existing id from database")
     void updateVenueByExistingIdShouldSuccess() throws Exception {
         UUID venueId = UUID.randomUUID();
         String message = "Venue updated successfully";
 
-        when(artisService.update(venueId.toString(), venueDTO)).thenReturn(venueDTO);
+        when(venueService.update(venueId.toString(), venueDTO)).thenReturn(venueDTO);
 
         mvc.perform(put(API_VENUE_BASE_ROUTE + "/" + venueId)
                         .contentType(APPLICATION_JSON)
@@ -232,7 +232,7 @@ public class VenueResourceTest extends BaseResourceTest{
     void updateVenueByWrongIdShouldFail() throws Exception {
         UUID venueId = UUID.randomUUID();
 
-        when(artisService.update(venueId.toString(), venueDTO)).thenThrow(ResourceNotFoundException.class);
+        when(venueService.update(venueId.toString(), venueDTO)).thenThrow(ResourceNotFoundException.class);
 
         mvc.perform(put(API_VENUE_BASE_ROUTE + "/" + venueId)
                         .contentType(APPLICATION_JSON)
@@ -240,7 +240,7 @@ public class VenueResourceTest extends BaseResourceTest{
                         .content(BaseResourceTest.asJsonString(venueDTO)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
-    }*/
+    }
 
 
 

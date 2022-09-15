@@ -36,7 +36,7 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_CLASS;
 
 @DirtiesContext(classMode= BEFORE_CLASS)
-public class VenueServiceImplTest extends BaseServiceTest{
+public class VenueServiceImplTest {
 
     VenueMapper venueMapper;
     VenueRepository venueRepository;
@@ -216,7 +216,7 @@ public class VenueServiceImplTest extends BaseServiceTest{
 
     }
 
-    /*@Test
+    @Test
     @DisplayName("Update venue by id from database")
     void updateVenueByExistingIdShouldSuccess() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String venueId = UUID.randomUUID().toString();
@@ -262,6 +262,6 @@ public class VenueServiceImplTest extends BaseServiceTest{
 
 
 
-    }*/
+    }
 
 }
