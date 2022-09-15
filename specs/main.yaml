@@ -6,7 +6,7 @@ info:
 servers:
   - url: 'http'
 paths:
-  /artist:
+  /artists:
     post:
       tags:
         - artist
@@ -70,7 +70,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
-  /artist/{id}:
+  /artists/{id}:
     get:
       tags:
         - artist
@@ -204,7 +204,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponses'
-  /artist/name/{name}:
+  /artists/name/{name}:
     get:
       tags:
         - artist
@@ -240,7 +240,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponses'
-  /venue:
+  /venues:
     post:
       tags:
         - venue
@@ -304,7 +304,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
-  /venue/{id}:
+  /venues/{id}:
     get:
       tags:
         - venue
@@ -438,7 +438,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponses'
-  /venue/name/{name}:
+  /venues/name/{name}:
     get:
       tags:
         - venue

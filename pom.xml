@@ -244,7 +244,7 @@
                                 <skipDefaultInterface>true</skipDefaultInterface>
                                 <library>spring-boot</library>
                                 <dateLibrary>java8-localdatetime</dateLibrary>
-                                <useTags>useTags</useTags>
+                                <useTags>true</useTags>
                                 <generateSupportingFiles>false</generateSupportingFiles>
                             </configOptions>
                         </configuration>
