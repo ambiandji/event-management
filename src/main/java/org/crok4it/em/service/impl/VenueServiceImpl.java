@@ -59,6 +59,15 @@ public class VenueServiceImpl implements VenueService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void deleteById(String id) {
+        venueRepository.findById(id.toString()).orElseThrow(() -> {
+            log.error("Venue with id {} not found", id);
+            throw new ResourceNotFoundException(String.format("Venue with id %s not found", id), ErrorCode.VENUE_NOT_FOUND);
+        });
+        venueRepository.deleteById(id);
+    }
+
     public Venue findByPhone(String phone) {
         return venueRepository.findByPhone(phone).orElse(null);
     }

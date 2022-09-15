@@ -18,6 +18,8 @@ import java.util.Collections;
 import java.util.UUID;
 
 import static org.crok4it.em.constant.VenueConstant.API_VENUE_BASE_ROUTE;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -174,13 +176,13 @@ public class VenueResourceTest extends BaseResourceTest{
                 .andExpect(jsonPath("$.success").value(true));
     }
 
-    /*@Test
+    @Test
     @DisplayName("Delete venue by existing id from database")
     void deleteVenueByExistingIdShouldSuccess() throws Exception {
         UUID venueId = UUID.randomUUID();
         String message = "Venue deleted successfully";
 
-        doNothing().when(artisService).deleteById(venueId.toString());
+        doNothing().when(venueService).deleteById(venueId.toString());
 
         mvc.perform(delete(API_VENUE_BASE_ROUTE + "/" + venueId))
                 .andDo(print())
@@ -195,7 +197,7 @@ public class VenueResourceTest extends BaseResourceTest{
     void deleteVenueWithWrongIdShouldFail() throws Exception {
         UUID venueId = UUID.randomUUID();
 
-        doThrow(ResourceNotFoundException.class).when(artisService).deleteById(venueId.toString());
+        doThrow(ResourceNotFoundException.class).when(venueService).deleteById(venueId.toString());
 
 
         mvc.perform(delete(API_VENUE_BASE_ROUTE + "/" + venueId))
@@ -203,7 +205,7 @@ public class VenueResourceTest extends BaseResourceTest{
                 .andExpect(status().isNotFound());
     }
 
-    @Test
+    /*@Test
     @DisplayName("Update venue by existing id from database")
     void updateVenueByExistingIdShouldSuccess() throws Exception {
         UUID venueId = UUID.randomUUID();

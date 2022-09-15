@@ -13,4 +13,6 @@ public interface VenueService {
     List<VenueDTO> findByName(String name);
 
     List<VenueDTO> findAll();
+
+    void deleteById(String toString);
 }

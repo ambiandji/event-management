@@ -41,6 +41,17 @@ public class VenueResource implements VenueApi {
     }
 
     @Override
+    public ResponseEntity<SuccessResponse> deleteVenueById(UUID id) {
+        venueService.deleteById(id.toString());
+        return ResponseEntity.status(OK).body(
+                new SuccessResponse()
+                        .message("Venue deleted successfully")
+                        .success(true)
+                        .result(Collections.emptyList())
+        );
+    }
+
+    @Override
     public ResponseEntity<SuccessResponse> findVenueAll() {
         List<VenueDTO> venueDTOS = venueService.findAll();
         return ResponseEntity.status(OK).body(

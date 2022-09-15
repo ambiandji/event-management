@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.crok4it.em.constant.ArtistConstant.API_ARTIST_BASE_ROUTE;
 import static org.crok4it.em.constant.VenueConstant.API_VENUE_BASE_ROUTE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -195,6 +196,41 @@ public class VenueSteps implements En {
                     assertThat(venueDTOS)
                             .hasSizeGreaterThan(0)
                             .isInstanceOf(ArrayList.class);
+        });
+        When("I delete venue with id {string}",
+                ( String id) -> {
+                    MvcResult result = mvc.perform(delete(API_VENUE_BASE_ROUTE + "/" + id)
+                                    .accept(APPLICATION_JSON))
+                            .andDo(print())
+                            .andExpect(status().isOk())
+                            .andReturn();
+
+
+                    msg = JsonPath.read(result.getResponse().getContentAsString(), "$.message");
+        });
+        Then("I should the see that the venue with id {string} is no longer in database and success message is {string}",
+                (String id, String message) -> {
+
+                    assertThat(msg).isEqualTo(message);
+
+                    MvcResult result = mvc.perform(get(API_VENUE_BASE_ROUTE + "/" + id)
+                                    .accept(APPLICATION_JSON))
+                            .andDo(print())
+                            .andExpect(status().isNotFound())
+                            .andReturn();
+
+        });
+        Then("The attempt to delete an venue with the id {string} will fail with status error {string} and error code {string}",
+                (String id, String httpStatus, String errorCode) -> {
+
+                    MvcResult result = mvc.perform(delete(API_VENUE_BASE_ROUTE + "/" + id)
+                                    .accept(APPLICATION_JSON))
+                            .andDo(print())
+                            .andExpect(status().isNotFound())
+                            .andReturn();
+                    assertThat(result.getResponse().getStatus()).isEqualTo(Integer.valueOf(errorCode));
+                    assertThat(HttpStatus.valueOf(result.getResponse().getStatus()).name()).isEqualTo(httpStatus);
+
         });
 
     }

@@ -204,7 +204,7 @@ paths:
         - Artist
       summary: Delete artist by id
       description: Delete artist by id from database
-      operationId: deleteById
+      operationId: deleteArtistById
       security:
         - oAuth:
             - artist:delete
@@ -319,6 +319,48 @@ paths:
         - name: id
           in: path
           description: Venue id to be fetch
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponses'
+    delete:
+      tags:
+        - Venue
+      summary: Delete venue by id
+      description: Delete venue by id from database
+      operationId: deleteVenueById
+      security:
+        - oAuth:
+            - venue:delete
+      parameters:
+        - name: id
+          in: path
+          description: Venue id to be deleted
           required: true
           schema:
             type: string

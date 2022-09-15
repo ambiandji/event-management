@@ -44,7 +44,7 @@ public class ArtisteResource implements ArtistApi {
     }
 
     @Override
-    public ResponseEntity<SuccessResponse> deleteById(UUID id) {
+    public ResponseEntity<SuccessResponse> deleteArtistById(UUID id) {
         artistService.deleteById(id.toString());
         return ResponseEntity
                 .status(OK)

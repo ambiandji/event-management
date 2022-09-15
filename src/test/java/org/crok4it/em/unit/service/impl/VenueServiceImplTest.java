@@ -27,6 +27,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.clearAllCaches;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -180,7 +181,7 @@ public class VenueServiceImplTest extends BaseServiceTest{
 
     }
 
-    /*@Test
+    @Test
     @DisplayName("Delete venue by id from database")
     void deleteVenueByExistingIdShouldSuccess() {
         String venueId = UUID.randomUUID().toString();
@@ -215,7 +216,7 @@ public class VenueServiceImplTest extends BaseServiceTest{
 
     }
 
-    @Test
+    /*@Test
     @DisplayName("Update venue by id from database")
     void updateVenueByExistingIdShouldSuccess() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String venueId = UUID.randomUUID().toString();
