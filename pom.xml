@@ -236,6 +236,7 @@
                         <configuration>
                             <inputSpec>${project.basedir}/specs/main.yaml</inputSpec>
                             <generatorName>spring</generatorName>
+                            <library>spring-boot</library>
                             <output>${project.build.directory}/generated-sources/</output>
                             <apiPackage>org.crok4it.em.api</apiPackage>
                             <modelPackage>org.crok4it.em.dto</modelPackage>

@@ -9,13 +9,10 @@ import org.crok4it.em.service.VenueService;
 import org.crok4it.em.service.impl.VenueServiceImpl;
 import org.crok4it.em.service.mapper.VenueMapper;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
-import org.mockito.Mockito;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.lang.reflect.InvocationTargetException;
@@ -30,9 +27,7 @@ import static org.mockito.Mockito.clearAllCaches;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_CLASS;
 
 @DirtiesContext(classMode= BEFORE_CLASS)

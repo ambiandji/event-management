@@ -129,7 +129,7 @@ RESPONSE: HTTP 204 (No Content)
 ```
 ### To view Swagger 2 API docs
 
-Run the server and browse to ```http://localhost:8080/swagger-ui/index.html#```
+Run the server and browse to ```http://localhost:5000/swagger-ui/index.html#```
 
 ### Questions and Comments: ambiandji@gmail.com
 

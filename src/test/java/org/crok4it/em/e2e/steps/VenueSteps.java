@@ -5,10 +5,8 @@ import com.google.gson.reflect.TypeToken;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java8.En;
-import org.crok4it.em.domain.Venue;
 import org.crok4it.em.dto.ArtistDTO;
 import org.crok4it.em.dto.VenueDTO;
-import org.crok4it.em.e2e.mapper.ArtistDTORowMapper;
 import org.crok4it.em.e2e.mapper.VenueDTORowMapper;
 import org.crok4it.em.unit.resource.BaseResourceTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +24,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.crok4it.em.constant.ArtistConstant.API_ARTIST_BASE_ROUTE;
 import static org.crok4it.em.constant.VenueConstant.API_VENUE_BASE_ROUTE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
